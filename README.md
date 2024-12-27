@@ -1,2 +1,2 @@
 # PISS
-Some kind of a magic
+Some kind of a magic.
