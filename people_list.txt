@@ -1,0 +1,4 @@
+Name, Last_name, Faculty_num, password\n
+Antoan,Ivaylov,7MI0600129,Bqh_na_kupon_u_Kravoder_na_8mi
+Bai,Ivan,12345,Obicham123
+Georgi,Kunchev,67890, Python20223
