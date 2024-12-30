@@ -1,5 +1,5 @@
-HTML, CSS - може и JS
-Room/Floor
+HTML, CSS, JS
+Room/Floor - бих се включила
 
 На Python + HTML5
 
@@ -10,52 +10,58 @@ HTML
 -Login-changed to add admin role
 -Register-changed to add admin role
 
--StudentPage
+-StudentPages
 	-StudentHomepage - ADDED AND CHANGED
-	-Look for empty room (Filters) - Reserve a Room(Request) - started filters and initial search; need the JS to show options(for rooms), returned from a py JSON and then to process the submitted form/chosen room/ and send it to a diff py script, and then process the answer from py script and notify the user
+	-Look for room (Filters) - Reserve a Room- started filters and initial search; need the JS to show options(for rooms), returned from a py JSON and then to process the submitted form/chosen room/ and send it to a diff py script, and then process the answer from py script and notify the user
 
 -------add pages for
 	-Profile
-	-Schedule(See Schedule, See Session(След гласуване) ; Download 	Schedule - if possible)
+	-Schedule(See Schedule; Download Schedule - if possible)
 	-ReservedRooms - може да се дублира с LessonPage
 	-LessionPage - Показва уроците за период от време и при натискане JS го прехвърля към детайли за определен час/лекция/упражнение и т.н.м; може да се стигне от Schedule + AttendenceCheck(QR scanner)
 	-Докладване на нередности
-	-Гласувай за сесия(неактивно в сесия/лято)
 	
--ProfesorPage
+-ProfesorPages
 	-ProfessorHomepage- ADDED AND CHANGED
-	-Look for empty room (Filters) + Reserve a Room(Request) - same as student - same HTML; need to do the same as above;
+	-Look for room (Filters) + Reserve a Room - same as student - same HTML; need to do the same as above;
 
 -------add pages for
 	-ReservedRooms - може да се дублира с LessonPage
-	-LessionPage - Показва уроците за период от време и при натискане JS го прехвърля към детайли за определен час/лекция/упражнение и т.н.м; може да се стигне от Schedule + AttendanceCheck 
+	-LessionPage - Показва уроците за период от време и при натискане JS го прехвърля към детайли за определен час/лекция/упражнение и т.н.м; може да се стигне от Schedule + AttendanceCheck може да се достига от тук или от QR кода, генериран за урока/стаята в този период.
 	-Profile
-	-Schedule(See Schedule, See Session(След гласуване) ; Download 	Schedule - if possible)
+	-Schedule(See Schedule; Download Schedule - if possible)
 	-Докладване на нередности
-	-Гласувай за сесия(неактивно в сесия/лято) и гласът може да 	има по-голям приоритет от този 	на студент
-	
-
--AdminPage
-	-AdminHomepage - ADDED
-
--------add pages for
-	-Profile
-	-Pending_Requests
-	-Pending_Reports
 
 
+-AdminPage - БЕЗ АДМИН СТРАНИЦА - ЩЕ СИ ВЛИЗА ОТ БАКЕНД НЯКЪДЕ и ще си натройват профила, преглед на доклади за нередности
+
+заявките за стая отпадат - ще се определя от приоритета/ролятата на потребителя!!!
+
+!!!ВАЖНО!!! Страниците на Student и Teacher могат да се обединят и просто да се пази username и да се вади от бакенд ролята ИЛИ Ролята и други детйли могат да се пазят в Session Storage
 
 JS
 ----
 -login.js - changed - added admin role and email field - needs more changes for specific classes and data needed from presentation layer as well as correction or relative paths for JSON POST
 -register.js - changed - added admin and email field - same remarks
-
+-останалите JS функции + JSON комуникация с бакенда.
 
 
 IMG
 ---
 
-Logo needs to be changed
+create new logo
+Logo links in HTML needs to be changed
+
+PYTHON 3-12-8
+------
+Code .
+ctr + shift + del - open command window in visual studio code
+
+py --version
+
+
+
+
 
 
 
