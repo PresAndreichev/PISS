@@ -1,5 +1,5 @@
 import unittest
-import rating
+import review
 import subject
 import study_plan
 import schedule

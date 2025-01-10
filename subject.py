@@ -1,4 +1,4 @@
-import rating
+import review
 SubjectGroup = ('COMPULSORY',  # They are given by the learning plan automatically
                 'REQUIRED_CHOSEN',  # The so-called ZIP (You need to choose these subjects)
                 # Below are only subject categories you can freely choose without constrain
