@@ -1,2 +1,0 @@
-Name, Last_name, Faculty_num, password, semsester, overlaps, speciality
-Bai,Ivan,12345,Obicham123,3,Yes,Computer Science

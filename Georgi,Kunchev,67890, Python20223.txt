@@ -1,2 +1,0 @@
-Name, Last_name, Faculty_num, password, semsester, overlaps, speciality
-Georgi,Kunchev,67890, Python20223,6,Yes,Computer Science
