@@ -23,7 +23,6 @@ if not os.path.exists(log_file_path):
     open(log_file_path, 'w').close()
 
 def validate_data_format(data):
-    """Validate if the data matches the format [0-9]{1}MI[0-9]{6}."""
     pattern = r"^[0-9]{1}MI[0-9]{7}$"
     return re.match(pattern, data)
 
@@ -68,13 +67,22 @@ def generate_frames():
 
 @app.route('/')
 def index():
-    """Render the homepage."""
     return render_template('index.html')
 
 @app.route('/video_feed')
 def video_feed():
     """Provide the video feed to the frontend."""
     return Response(generate_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
+
+@app.route('/scanned_qr_codes', methods=['GET'])
+def scanned_qr_codes():
+    data_list = []
+    if os.path.exists(log_file_path):
+        with open(log_file_path, 'r') as log_file:
+            for line in log_file:
+                code, timestamp = line.strip().split(" - ")
+                data_list.append({"code": code, "timestamp": timestamp})
+    return Response({"scanned_codes": data_list})
 
 if __name__ == "__main__":
     app.run(debug=True)

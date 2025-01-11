@@ -1,15 +1,30 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QR Code Scanner</title>
-</head>  
-<body>
-    <h1>QR Code Scanner</h1>
-    <p>Align the QR code within the camera view to scan it. Detected QR codes will appear in the backend console.</p>
-    <div>
-        <img src="{{ url_for('video_feed') }}" alt="Video Stream" style="width: 100%; max-width: 640px; border: 1px solid black;">
-    </div>
-</body>
+<html lang="bg">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Присъствие</title>
+        <link rel="stylesheet" href="../css/attendanceQR.css">
+        <link rel="icon" href="../img/fmi_rs_logo.jpg" type="image/png">
+        <link rel="stylesheet" href="../css/logo.css">
+    </head>
+    <body>
+        <header>
+            <h1>FMI Room Scheduler</h1>
+            <h2>Сканирай QR кода и отбележи на присъствието си</h2>
+            <a href="index.html" class="button">Към главното меню</a>
+        </header>
+        <main>
+            <section id="attendanceQR">
+                <!-- Video stream -->
+                <img src="{{ url_for('video_feed') }}" alt="Video Stream" style="width: 100%; max-width: 640px; border: 1px solid black;">
+                <!-- Section to display scanned codes -->
+                <h3>Сканирани QR кодове:</h3>
+                <ul id="scannedCodesList">
+                    <li>Loading scanned QR codes...</li>
+                </ul>
+            </section>
+        </main>
+        <script src="../js/attendanceQR-script.js"></script>
+    </body>
 </html>
