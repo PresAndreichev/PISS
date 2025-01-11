@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Scanner</title>
+</head>  
+<body>
+    <h1>QR Code Scanner</h1>
+    <p>Align the QR code within the camera view to scan it. Detected QR codes will appear in the backend console.</p>
+    <div>
+        <img src="{{ url_for('video_feed') }}" alt="Video Stream" style="width: 100%; max-width: 640px; border: 1px solid black;">
+    </div>
+</body>
+</html>
