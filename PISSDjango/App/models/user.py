@@ -9,6 +9,8 @@ class User(models.Model):
     is_profile_disabled = models.BooleanField()
     # change password, reserveRoom, unreserve, attendClass/unattendClass, searchRooms, disableProfile, alert, timeTable
 
+    objects = models.Manager()  # to stop PyCharm warnings
+
 
 class StudentSpeciality(models.Model):
     name = models.CharField(max_length=50, unique=True)
@@ -22,6 +24,7 @@ class StudentSpeciality(models.Model):
     COMPUTER_SCIENCE = "Computer science"
     SOFTWARE_ENGINEERING = "Software engineering" 
     """
+    objects = models.Manager()  # to stop PyCharm warnings
 
 
 class Student(User):
@@ -34,3 +37,5 @@ class Student(User):
     )
     is_in_charge_of_students_council_room = models.BooleanField(default=False)
     # function for taking up subject, taking off, finishing subject, rating subject/lesson,
+
+    objects = models.Manager()  # to stop PyCharm warnings

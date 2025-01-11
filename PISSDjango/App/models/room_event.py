@@ -10,6 +10,7 @@ class LectureType(models.Model):
     THEORETICAL_EXERCISE = 'THEORETICAL_EXERCISE'
     COMPUTER_PRACTICUM_EXERCISE = 'COMPUTER_PRACTICUM_EXERCISE'
     """
+    objects = models.Manager()  # to stop PyCharm warnings
 
 
 class RoomEvent(models.Model):
@@ -37,6 +38,7 @@ class RoomEvent(models.Model):
         related_name="attended_events",
         blank=True
     )
+    objects = models.Manager()  # to stop PyCharm warnings
 
     def get_day_of_week(self):
         if not self.date:
@@ -60,3 +62,4 @@ class LessonEvent(RoomEvent):  # Will connect a single event to a subject and a 
         related_name='lesson_events'  # Based on this we call the object(Subject).<related_name>(lesson_events)
         # to get the models from DB
     )
+    objects = models.Manager()  # to stop PyCharm warnings

@@ -17,6 +17,8 @@ class Review:
                                blank=True
                                )
     created_at = models.DateTimeField(auto_now_add=True)
+    objects = models.Manager()  # to stop PyCharm warnings
+
 
     class Meta:
         abstract = True
@@ -29,6 +31,7 @@ class RoomEventReview(Review):
                                    on_delete=models.CASCADE,
                                    related_name="reviews"
                                    )
+    objects = models.Manager()  # to stop PyCharm warnings
 
 
 class SubjectReview(Review):
@@ -36,3 +39,4 @@ class SubjectReview(Review):
                                 on_delete=models.CASCADE,
                                 related_name="reviews"
                                 )
+    objects = models.Manager()  # to stop PyCharm warnings
