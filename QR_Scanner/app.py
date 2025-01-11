@@ -1,7 +1,7 @@
 from flask import Flask, render_template, Response
 import cv2
 import datetime
-import os
+import os, re
 
 app = Flask(__name__)
 
@@ -18,16 +18,19 @@ class QRScanner:
 
 scanner = QRScanner()
 
-# Define the log file path
 log_file_path = "QR_scanner/scanned_qr_codes.txt"
-
-# Check if the log file exists, and create it if not
 if not os.path.exists(log_file_path):
     open(log_file_path, 'w').close()
 
+def validate_data_format(data):
+    """Validate if the data matches the format [0-9]{1}MI[0-9]{6}."""
+    pattern = r"^[0-9]{1}MI[0-9]{7}$"
+    return re.match(pattern, data)
+
+
 def generate_frames():
     """Yield frames with QR code detection for the video stream."""
-    cap = cv2.VideoCapture(0)  # Use the primary camera
+    cap = cv2.VideoCapture(0)
     scanned_codes = set()
 
     while True:
@@ -35,29 +38,27 @@ def generate_frames():
         if not success:
             break
 
-        # Detect QR codes
         data, bbox = scanner.detect_qr_code(frame)
         if data and data not in scanned_codes:
-            print(f"QR Code detected: {data}")
+            if validate_data_format(data):  # Validate the data format
+                print(f"Valid QR Code detected: {data}")
 
-            # Save the timestamp when the QR code is detected
-            timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            print(f"Timestamp of detection: {timestamp}")
-            scanned_codes.add(data)
+                timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                print(f"Timestamp of detection: {timestamp}")
+                scanned_codes.add(data)
 
-            # Optionally save the QR code and timestamp to a log file
-            with open(log_file_path, "a") as log_file:
-                log_file.write(f"{data} - {timestamp}\n")
+                with open(log_file_path, "a") as log_file:
+                    log_file.write(f"{data} - {timestamp}\n")
 
-            # Draw bounding box around the QR code
-            if bbox is not None:
-                bbox = bbox.astype(int)
-                for i in range(len(bbox[0])):
-                    pt1 = tuple(bbox[0][i])
-                    pt2 = tuple(bbox[0][(i + 1) % len(bbox[0])])
-                    cv2.line(frame, pt1, pt2, (0, 255, 0), 2)
+                if bbox is not None:
+                    bbox = bbox.astype(int)
+                    for i in range(len(bbox[0])):
+                        pt1 = tuple(bbox[0][i])
+                        pt2 = tuple(bbox[0][(i + 1) % len(bbox[0])])
+                        cv2.line(frame, pt1, pt2, (0, 255, 0), 2)
+            else:
+                print(f"Ignored QR Code with invalid format: {data}")
 
-        # Encode the frame as JPEG
         _, buffer = cv2.imencode('.jpg', frame)
         frame = buffer.tobytes()
         yield (b'--frame\r\n'
