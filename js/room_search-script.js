@@ -120,8 +120,6 @@ document.addEventListener('DOMContentLoaded', async function () {
                     startTime: startTime, endTime: endTime, dateReservation: dateSaved,
                 });
                     
-                const roomDataJSON = JSON.stringify(reviewData);
-
                 const response = await fetch('../py/reserve_room.py', { //May need to redart the PATH 
                     method: 'POST',
                     headers: {
