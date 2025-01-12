@@ -20,6 +20,7 @@ document.getElementById('login-form').addEventListener('submit', async function 
 
                 sessionStorage.setItem("username", username);
                 sessionStorage.setItem("role", role);
+                sessionStorage.setItem("password", password);
                 window.location.href = '../html/index.html';
 
             } else {
