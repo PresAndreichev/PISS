@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         const hasWhiteBoard = document.getElementById('white').checked;
         const hasBlackBoard = document.getElementById('white').checked;
         const hasInteractiveBoard = document.getElementById('white').checked;
-        const hasMedia = document.getElementById('media').value; // 1 has media, 0 - has no media
+        const hasMedia = document.getElementById('media').checked; // 1 has media, 0 - has no media
 
         if (startTime >= endTime) {
             alert('Началният час трябва да бъде преди крайния час!');
