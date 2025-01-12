@@ -1,4 +1,4 @@
-﻿
+
 document.addEventListener('DOMContentLoaded', async function () {
 
     const current_user = sessionStorage['username'];
@@ -25,24 +25,33 @@ document.addEventListener('DOMContentLoaded', async function () {
     let roomSeqNumber = 1;
 
     response_data.rooms.forEach(room => {
-         const roomElement = document.createElement('section');
+        const roomElement = document.createElement('section');
+
+        lessonType = room.lectureType;
+        type;
+        if (lessonType == "lecture") {
+            type = "Лекция";
+        } else if (lessonType == "practical") {
+            type = "Практикум";
+        } else if (lessonType == "theoretical") {
+            type = "Семинар";
+        }
 
          roomElement.innerHTML = `
-            <strong>Стая/Зала ${roomSeqNumber}: ${room.number}</strong>
-            <p>Вид стая - ${room.lessonName}</p>
-            <p>Вид стая - ${room.lessonType}</p>
-            <p>Вид стая - ${room.date}</p>
-            <p>Вид стая - ${room.startTime}</p>
-            <p>Вид стая - ${room.endType}</p>
-            <p>Вид стая - ${room.criteria1}</p>
-            <p>Вид дъска - ${room.criteria2}</p>
-            <p>Налична мултимедия - ${room.criteria3}</p>
-            <p>Капацитет - ${room.seatsCount}</p>
+            <h3>${roomSeqNumber}. Дисциплина: ${room.subject}</h3>
+            <p>Тема: ${room.lessonName}</p>
+            <p>Тип занятие: ${type}</p>
+            <p>Преподавател по дисциплина: ${room.lessonName}</p>
+            <p>Стая/Зала: ${room.number}</p>
+            <p>Ден: ${room.date}</p>
+            <p>Начален час: ${room.start}</p>
+            <p>Краен час: ${room.end}</p>
+            
          `;
 
-         container.appendChild(roomElement);
-         roomSeqNumber++;
-    });        
+        container.appendChild(roomElement);
+        roomSeqNumber++;
+    });
        
 });
     
