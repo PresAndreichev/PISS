@@ -62,7 +62,7 @@ async function validateRegistration(username, password, email) {
 
     const data = JSON.stringify({ username: username, password: password, email : email });
 
-        const response = await fetch('/login.py', {
+        const response = await fetch('/login/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
