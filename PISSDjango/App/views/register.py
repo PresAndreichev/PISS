@@ -20,7 +20,7 @@ def register_user(request):
             # User already exists?
             if User.objects.filter(username=username).exists() or User.objects.filter(email=email).exists():
                 # Return success for security reasons but do not create a new user
-                return JsonResponse({"success": True, "message": "User registration successful"})
+                return JsonResponse({"success": True, "message": "User registration successful"},status=200)
 
             # Create a new user
             User.objects.create_user(
@@ -31,7 +31,7 @@ def register_user(request):
                 is_profile_disabled=False
             )
 
-            return JsonResponse({"success": True, "message": "User registration successful"})
+            return JsonResponse({"success": True, "message": "User registration successful"},status=200)
         except Exception as e:  # an exception has occurred withing the program, return it to the user
             return JsonResponse({"success": False, "message": str(e)}, status=500)
 

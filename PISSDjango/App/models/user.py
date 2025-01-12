@@ -4,7 +4,7 @@ from django.db import models
 class User(models.Model):
     email = models.EmailField(unique=True)
     password = models.CharField(max_length=255)
-    name = models.CharField(max_length=255)
+    username = models.CharField(max_length=255)
     priority = models.SmallIntegerField()
     is_profile_disabled = models.BooleanField()
     # change password, reserveRoom, unreserve, attendClass/unattendClass, searchRooms, disableProfile, alert, timeTable

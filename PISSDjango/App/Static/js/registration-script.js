@@ -119,7 +119,7 @@ async function checkAvailability(username, password, role, email, fn) {
     const data = JSON.stringify({ username: username, password: password, role: role, email: email, fn: fn });
 
     try {
-        const response = await fetch('../python/registration.py', {  
+        const response = await fetch('/register/', {  
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -133,7 +133,7 @@ async function checkAvailability(username, password, role, email, fn) {
 
         if (responseJSON.success) {
             alert('Регистрацията беше успешна!');
-            window.location.href = '../html/register.html';
+            window.location.href = '../html/login.html';
 
         } else {
             alert('Съществуващ потребител!');

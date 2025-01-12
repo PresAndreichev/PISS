@@ -62,7 +62,7 @@ async function validateRegistration(username, password, email) {
 
     const data = JSON.stringify({ username: username, password: password, email : email });
 
-        const response = await fetch('../python/login.py', {
+        const response = await fetch('/login.py', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -73,8 +73,10 @@ async function validateRegistration(username, password, email) {
 
     const responseJSON = await response.json();
 
-        if (responseJSON.success) {
+        if (response.ok && responseJSON.success) {
+            localStorage.setItem("authToken", responseJSON.token);
             role = responseJSON.role;
+            window.location.href = '../html/index.html';
             return true;
 
         } else {

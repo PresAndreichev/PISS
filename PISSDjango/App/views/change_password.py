@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from App.models import User
 import json
-from tokens import decode_token
+from App.views.tokens import decode_token
 
 @csrf_exempt  # Disable CSRF for simplicity
 def change_password(request, user_id):

@@ -10,5 +10,6 @@ urlpatterns = [
     path('disable-profile/', disable_profile, name='disable_profile'),  # Disable profile route
     path('change_password/', change_password, name='change_password'),  # Room schedule route
     path('register/', register_user, name='register'),
-    path('index/',lambda request: serve_html(request, 'index'),name='index'),
+    path('index/',lambda request: serve_html(request, 'index'),name='index'), 
+    path('', lambda request: serve_html(request, 'register'), name='register'),  # Homepage route
 ]

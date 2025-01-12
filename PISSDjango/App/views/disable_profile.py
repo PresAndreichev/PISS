@@ -1,7 +1,7 @@
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
-from tokens import decode_token
+from App.views.tokens import decode_token
 
 @csrf_exempt  # Use CSRF protection in production
 @login_required  # Ensure the user is logged in
