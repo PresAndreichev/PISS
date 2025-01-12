@@ -7,9 +7,8 @@ document.addEventListener('DOMContentLoaded', async function () {
         console.error('QR code scanner feed not found.');
     }
 
-    // Function to fetch and display scanned QR codes
     async function fetchScannedCodes() {
-        console.log("Attempting to fetch scanned QR codes..."); // Log this for debugging
+        console.log("Attempting to fetch scanned QR codes..."); 
         try {
             const response = await fetch('/scanned_qr_codes');
             console.log('Fetched data:', response); // Log the raw response
@@ -23,7 +22,6 @@ document.addEventListener('DOMContentLoaded', async function () {
                     console.log(`Code: ${item.code}, Timestamp: ${item.timestamp}`);
                 });
 
-                // Optionally update the UI here
                 const list = document.getElementById('scannedCodesList');
                 if (list) {
                     list.innerHTML = ''; // Clear the list first

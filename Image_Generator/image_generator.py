@@ -2,11 +2,11 @@ from PIL import Image, ImageDraw, ImageFont
 
 class WeeklySchedule:
     def __init__(self, timetable, subjects, overlaps_can_appear, hours, days):
-        self.timetable = timetable  # 2D array, e.g., [[0, 1], [2, 3], ...]
-        self.subjects = subjects  # List of subjects corresponding to timetable indices
+        self.timetable = timetable  
+        self.subjects = subjects  
         self.overlaps_can_appear = overlaps_can_appear
-        self.hours = hours  # List of hours (e.g., ["07:00", "08:00", ...])
-        self.days = days  # List of days (e.g., ["Monday", "Tuesday", ...])
+        self.hours = hours  
+        self.days = days  
 
 class ImageGenerator:
     @staticmethod
@@ -42,7 +42,6 @@ class ImageGenerator:
                 y1 = y0 + cell_height
                 draw.rectangle([x0, y0, x1, y1], outline='gray')
         
-        # Populate the grid with subjects
         for day, hours in enumerate(schedule.timetable):
             for hour, subject_index in enumerate(hours):
                 if subject_index != -1:  # Assume -1 means no class
@@ -54,7 +53,6 @@ class ImageGenerator:
                     subject = schedule.subjects[subject_index]
                     draw.text((x0 + 5, y0 + 5), subject, fill='black')
         
-        # Save the image
         img.save(output_file)
         print(f"Weekly schedule saved as {output_file}")
 
