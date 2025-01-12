@@ -4,12 +4,10 @@ from django.views.decorators.csrf import csrf_exempt
 from App.models import User
 import json
 
-
-@csrf_exempt  # Disable CSRF for simplicity
+@csrf_exempt
 def register_user(request):
     if request.method == "POST":
         try:
-            # Parse JSON data from the request body
             data = json.loads(request.body)
             username = data.get("username")
             email = data.get("email")

@@ -3,15 +3,23 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from App.models import User
 import json
-
+from tokens import decode_token
 
 @csrf_exempt  # Disable CSRF for simplicity
 def change_password(request, user_id):
     if request.method == "POST":
+        token = request.headers.get("Authorization").replace("Bearer ", "")
+        user_id = decode_token(token)
+        if not user_id:
+            return JsonResponse({"success": False, "message": "Invalid token"}, status=401)
+
+
+
         try:
             data = json.loads(request.body)
             current_password = data.get("current_password")
             new_password = data.get("new_password")
+
 
             if not current_password or not new_password:
                 return JsonResponse({"success": False, "message": "Missing required fields"}, status=400)

@@ -4,7 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 from App.models import User
 import json
 from django.shortcuts import render
-
+from tokens import generate_token
 
 @csrf_exempt  # Disable CSRF for simplicity
 def login_view(request):
@@ -21,14 +21,17 @@ def login_view(request):
             # Fetch the user by email
             try:
                 user = User.objects.get(email=email)
+                
             except User.DoesNotExist:
                 return JsonResponse({"success": False, "message": "Invalid credentials"}, status=401)
 
             if not check_password(password, user.password):
                 return JsonResponse({"success": False, "message": "Invalid credentials"}, status=401)
 
+            
+            token = generate_token(user.id) 
             # maybe change the url as well - generate homepage info based on this
-            return JsonResponse({"success": True, "message": "Login successful", "user_id": user.id})
+            return JsonResponse({"success": True, "message": "Login successful", "token": token})
 
         except Exception as e:
             return JsonResponse({"success": False, "message": str(e)}, status=500)
