@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8" />
+    <title>Регистрация</title>
+    <link rel="stylesheet" href="../css/registration_style.css">
+    <link rel="icon" href="../img/fmi_rs_logo.jpg" type="image/png">
+    <link rel="stylesheet" href="../css/logo.css">
+</head>
+    <body>
+        <header>
+            <h1>Добре дошли - FMI Room Scheduler</h1>
+            <h2>Регистрация</h2>
+        </header>
+                <main>
+                    <section>
+
+                        <form id="register-form" method="post">
+
+                            <fieldset class="fieldset-style">
+
+                                <section>
+                                    <label>Потребителско име:</label>
+                                    <p class="input-criteria input-criteria-right">Потребителското име трябва да е между 6 и 12 символа</p>
+                                    <p><input class="input-style" type="text" id="username" name="username" required /></p>
+                                </section>
+
+                                <section>
+                                    <label>Парола:</label>
+                                    <p class="input-criteria input-criteria-right">Паролата трябва да съдържа поне 10 символа. Също така трябва да съдържа ПОНЕ 1 малка буква, 1 главна буква и 1 цифра</p>
+                                    <p><input class="input-style" type="password" id="password" name="password" required /></p>
+                                </section>                                
+
+                                <section>
+                                    <label>Имейл:</label>
+                                    <p class="input-criteria input-criteria-right">Имейлът трябва да е валиден формат (например: example@domain.com)</p>
+                                    <p><input class="input-style" type="email" id="email" name="email" required /></p>
+                                </section>
+
+                                <section class="input-fn-disabled" id="fn-field">
+                                    <label>Факултетен номер:</label>
+                                    <p class="input-criteria input-criteria-right">ФН трябва да съдържа ТОЧНО 10 символа</p>
+                                    <p><input class="input-style" type="text" id="fn" name="fn" /></p>
+                                </section>
+
+                                <section id="role-field">
+                                    <label>Роля:</label>
+                                    <section>
+                                        <input type="radio" id="role-student" name="role" value="1" required>
+                                        Студент
+
+                                        <input type="radio" id="role-teacher" name="role" value="2" required>
+                                        Преподавател
+
+                                    </section>
+
+                                </section>
+
+                                <section>
+                                    <button type="submit" id="submit-btn">Регистрирай ме!</button>
+                                </section>
+
+                                <p>Ако вече имате свой профил в системата, може да влезете в него от тук: <a href="login.html">Вход в системата</a></p>
+                            </fieldset>
+                        </form>
+
+                    </section>
+                </main>
+        </body>
+    </html>
+    <script src="../js/registration-script.js"></script>
