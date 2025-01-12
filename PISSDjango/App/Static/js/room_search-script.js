@@ -13,9 +13,9 @@
 
 }
 
-function generateTimeOptions() {
+function generateTimeOptions(offset = 0) {
     const timeOptions = [];
-    for (let i = 0; i < 24; i++) {
+    for (let i = 6 + offset; i < 24 + offset; i++) {
         const time = `${i.toString().padStart(2, '0')}:00`; // Format as "00:00"
         timeOptions.push(`<option value="${time}">${time}</option>`);
     }
@@ -31,9 +31,8 @@ document.addEventListener('DOMContentLoaded', async function () {
     const startTimeSelect = document.getElementById('startTime');
     const endTimeSelect = document.getElementById('endTime');
 
-    const optionsHTML = generateTimeOptions();
-    startTimeSelect.innerHTML = optionsHTML;
-    endTimeSelect.innerHTML = optionsHTML;
+    startTimeSelect.innerHTML = generateTimeOptions();
+    endTimeSelect.innerHTML = generateTimeOptions(1);
 
     room_filters = document.getElementById('timeSelectionForm');
 
@@ -44,9 +43,11 @@ document.addEventListener('DOMContentLoaded', async function () {
         const date = document.getElementById('datePicker').value;
         const startTime = document.getElementById('startTime').value;
         const endTime = document.getElementById('endTime').value;
-        const criteria1 = document.getElementById('criteria1').value; //computer, normal
-        const criteria2 = document.getElementById('criteria2').value; //white, black, interactive
-        const criteria3 = document.getElementById('criteria3').value; // 1 has media, 0 - has no media
+        const isComputer = document.getElementById('isComputer').value; //1 - isComp, 0 - is normal
+        const hasWhiteBoard = document.getElementById('white').checked;
+        const hasBlackBoard = document.getElementById('white').checked;
+        const hasInteractiveBoard = document.getElementById('white').checked;
+        const hasMedia = document.getElementById('media').value; // 1 has media, 0 - has no media
 
         if (startTime >= endTime) {
             alert('Началният час трябва да бъде преди крайния час!');
@@ -55,7 +56,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         const data = JSON.stringify({
             username: current_user, role: userRole, date: date, startTime: startTime, endTime: endTime,
-            criteria1: criteria1, criteria2: criteria2, criteria3: criteria3
+            isComputer: isComputer, hasWhiteBoard: hasWhiteBoard, hasBlackBoard: hasBlackBoard, hasInteractiveBoard: hasInteractiveBoard, hasMedia: hasMedia
         });
 
         const response = await fetch('../py/get_rooms.py', { //May need to redart the PATH 
@@ -78,14 +79,49 @@ document.addEventListener('DOMContentLoaded', async function () {
         response_data.rooms.forEach(room => {
             const roomElement = document.createElement('section');
 
+            let isComp, black, white, inter, media;
+
+            if (room.isComputer) {
+                isComp = "Компютърна";
+            } else {
+                isComp = "Обикновена";
+            }
+
+            if (room.hasWhiteBoard) {
+                white = "Бяла";
+            } else {
+                white = "Не";
+            }
+
+            if (room.hasBlackBoard) {
+                black = "Черна";
+            } else {
+                black = "Не";
+            }
+
+            if (room.hasInteractiveBoard) {
+                inter = "Интерактивна";
+            } else {
+                inter = "Не";
+            }
+
+            if (room.hasMedia) {
+                media = "Налична";
+            } else {
+                media = "Не";
+            }
+
             roomElement.innerHTML = `
             <label>
-                <input type="radio" name="${radioGroupName}" value="${room.number}">
-                <strong>Стая/Зала ${roomSeqNumber}: ${room.number}</strong>
+                <input type="radio" name="${radioGroupName}" value="${room.roomNumber}">
+                <strong>Стая/Зала ${roomSeqNumber}: ${room.roomNumber}</strong>
             </label>
-            <p>Вид стая - ${room.criteria1}</p>
-            <p>Вид дъска - ${room.criteria2}</p>
-            <p>Налична мултимедия - ${room.criteria3}</p>
+            <p>Вид стая - ${isComp}</p>
+            <p>Вид дъска - </p>
+            <p>    Черна - ${black}</p>
+            <p>    Бяла - ${white}</p>
+            <p>    Интерактивна - ${inter}</p>
+            <p>Налична мултимедия - ${media}</p>
             <p>Капацитет - ${room.seatsCount}</p>
             `;
 
