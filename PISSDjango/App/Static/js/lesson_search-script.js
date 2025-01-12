@@ -12,7 +12,7 @@
         const lessonName = document.getElementById('lesson-name').value;
         const startDate = document.getElementById('startDate').value;
         const endDate = document.getElementById('endDate').value;
-        const type = document.getElementById('lecture-type').value; //lecture, practical, theoretical
+        const type = document.getElementById('lecture-type').value; //lecture, practical, theoretical, all
 
         if (startDate >= endDate) {
             alert('Началната дата трябва да бъде преди крайната!');
