@@ -3,6 +3,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from App.models import User
 import json
+from django.shortcuts import render
 
 
 @csrf_exempt  # Disable CSRF for simplicity
