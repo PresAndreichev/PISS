@@ -14,7 +14,7 @@ class SubjectGroup(models.Model):
     REQUIRED_CHOSEN = 'REQUIRED_CHOSEN'
     OTHER = 'OTHER'
     """
-    #objects = models.Manager()  # to stop PyCharm warnings
+    objects = models.Manager()  # to stop PyCharm warnings
 
 
 class Subject(models.Model):
@@ -32,4 +32,4 @@ class Subject(models.Model):
     weekly_lectures_duration = models.PositiveSmallIntegerField()
     weekly_exercises_duration = models.PositiveSmallIntegerField()
     weekly_computer_exercises_duration = models.PositiveSmallIntegerField()
-    #objects = models.Manager()  # to stop PyCharm warnings
+    objects = models.Manager()  # to stop PyCharm warnings

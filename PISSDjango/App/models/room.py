@@ -9,7 +9,7 @@ class Room(models.Model):
                               on_delete=models.CASCADE,
                               related_name="rooms"
                               )
-    #objects = models.Manager()  # to stop PyCharm warnings
+    objects = models.Manager()  # to stop PyCharm warnings
 
     def __bit_is_as_expected(self, binary_bit_to_check):
         CONVERTED_TO_INT_BINARY = int(binary_bit_to_check, 2)
