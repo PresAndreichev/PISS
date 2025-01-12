@@ -10,7 +10,7 @@ class LectureType(models.Model):
     THEORETICAL_EXERCISE = 'THEORETICAL_EXERCISE'
     COMPUTER_PRACTICUM_EXERCISE = 'COMPUTER_PRACTICUM_EXERCISE'
     """
-    objects = models.Manager()  # to stop PyCharm warnings
+    # objects = models.Manager()  # to stop PyCharm warnings
 
 
 class RoomEvent(models.Model):
@@ -53,7 +53,7 @@ class RoomEvent(models.Model):
 class LessonEvent(RoomEvent):  # Will connect a single event to a subject and a lecture type
     lecture_type = models.ForeignKey(
         LectureType,
-        on_delete=models.SET_NULL,
+        on_delete=models.CASCADE,
         related_name="lesson_events"
     )
     subject = models.ForeignKey(

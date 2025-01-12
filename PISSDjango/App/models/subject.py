@@ -2,7 +2,7 @@ from django.db import models
 from .user import User
 
 
-class SubjectGroup(models.TextChoices):
+class SubjectGroup(models.Model):
     name = models.CharField(max_length=50, unique=True)
     """ - seed the db later
     MATH = 'MATH'
@@ -14,7 +14,7 @@ class SubjectGroup(models.TextChoices):
     REQUIRED_CHOSEN = 'REQUIRED_CHOSEN'
     OTHER = 'OTHER'
     """
-    objects = models.Manager()  # to stop PyCharm warnings
+    #objects = models.Manager()  # to stop PyCharm warnings
 
 
 class Subject(models.Model):
@@ -32,4 +32,4 @@ class Subject(models.Model):
     weekly_lectures_duration = models.PositiveSmallIntegerField()
     weekly_exercises_duration = models.PositiveSmallIntegerField()
     weekly_computer_exercises_duration = models.PositiveSmallIntegerField()
-    objects = models.Manager()  # to stop PyCharm warnings
+    #objects = models.Manager()  # to stop PyCharm warnings

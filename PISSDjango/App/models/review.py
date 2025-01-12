@@ -39,4 +39,4 @@ class SubjectReview(Review):
                                 on_delete=models.CASCADE,
                                 related_name="reviews"
                                 )
-    objects = models.Manager()  # to stop PyCharm warnings
+    # objects = models.Manager()  # to stop PyCharm warnings
