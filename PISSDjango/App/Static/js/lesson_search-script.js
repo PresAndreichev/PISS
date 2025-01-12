@@ -44,6 +44,16 @@
         response_data.lessons.forEach(lesson => {
             const lessonElement = document.createElement('section');
 
+            lessonType = lesson.lectureType;
+            type;
+            if (lessonType == "lecture") {
+                type = "Лекция";
+            }  else if (lessonType == "practical"){
+                type = "Практикум";
+            } else if (lessonType == "theoretical"){
+                type = "Семинар";
+            }
+
             lessonElement.innerHTML = `
             <label>
                 <input type="radio" name="${radioGroupName}" value="${lessonSeqNumber}">
@@ -53,7 +63,7 @@
             <p>Ден - ${lesson.date}</p>
             <p>Начален час - ${lesson.startTime}</p>
             <p>Краен час - ${lesson.endTime}</p>
-            <p>Вид занятие - ${lesson.lectureType}</p>
+            <p>Вид занятие - ${type}</p>
             `;
 
             container.appendChild(lessonElement);
@@ -73,7 +83,7 @@
             const selectedLesson = document.querySelector('input[name="lessonSelection"]:checked');
 
             if (!selectedLesson) {
-                alert('Моля, изберете стая преди да запазите!');
+                alert('Моля, изберете урок преди да запазите!');
                 return;
             }
 
@@ -82,7 +92,7 @@
             const selectedLessonDetails = response_data.lessons[lessonSeqNumber - 1];  
 
             if (!selectedLessonDetails) {
-                alert('Грешка при извличане на информация за стаята!');
+                alert('Грешка при извличане на информация за избраната стая!');
                 return;
             }
 
