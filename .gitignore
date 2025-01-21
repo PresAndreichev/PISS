@@ -1,2 +1,27 @@
+# Compiled files
+__pycache__/
+*.py[cod]
+*$py.class
 
-/.idea
+# Virtual environments
+venv/
+env/
+
+# Django related
+*.log
+*.pot
+*.pyc
+
+# Untrack pip since we have a requirements.txt
+Pipfile
+Pipfile.lock
+
+# Uncomment in the future to stop tracking the DB - sensitive data!
+# *.sqlite3
+
+# Node-JS
+node_modules/
+
+# IDE specific
+.vscode/
+.idea
