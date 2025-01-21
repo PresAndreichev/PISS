@@ -16,8 +16,8 @@ env/
 Pipfile
 Pipfile.lock
 
-# Uncomment in the future to stop tracking the DB - sensitive data!
-# *.sqlite3
+# Stop tracking the DB - sensitive data!
+*.sqlite3
 
 # Node-JS
 node_modules/
