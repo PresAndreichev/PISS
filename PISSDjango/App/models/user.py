@@ -7,8 +7,7 @@ class User(models.Model):
     username = models.CharField(max_length=255)
     priority = models.SmallIntegerField()
     is_profile_disabled = models.BooleanField()
-    # change password, reserveRoom, unreserve, attendClass/unattendClass, searchRooms, disableProfile, alert, timeTable
-
+    #change password, reserveRoom, unreserve, attendClass/unattendClass, searchRooms, disableProfile, alert, timeTable
     #objects = models.Manager()  # to stop PyCharm warnings
 
 
