@@ -11,18 +11,18 @@ def login_view(request):
     if request.method == "POST":
         try:
             data = json.loads(request.body)
-            email = data.get("email")
+            #check password 
             password = data.get("password")
-
+            username = data.get("username")
             # Validate input
-            if not email or not password:
-                return JsonResponse({"success": False, "message": "Email and password are required"}, status=400)
+            if not username or not password:
+                return JsonResponse({"success": False, "message": "Username and password are required"}, status=400)
 
             # Fetch the user by email
             try:
-                user = User.objects.get(email=email)
-                
+                user = User.objects.get(username=username)
             except User.DoesNotExist:
+                
                 return JsonResponse({"success": False, "message": "Invalid credentials"}, status=401)
 
             if not check_password(password, user.password):

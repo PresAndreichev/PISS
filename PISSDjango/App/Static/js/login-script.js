@@ -6,7 +6,7 @@ document.getElementById('login-form').addEventListener('submit', async function 
 
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
-
+    
     let isValid = validateCredentials(username, password);
 
     if (isValid) {
@@ -60,7 +60,7 @@ function validateCredentials(username, password) {
 
 async function validateRegistration(username, password, email) {
 
-    const data = JSON.stringify({ username: username, password: password, email : email });
+    const data = JSON.stringify({ username: username, password: password, email: email});
 
         const response = await fetch('/login/', {
             method: 'POST',
