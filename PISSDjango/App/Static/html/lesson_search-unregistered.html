@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Търсене на урок</title>
+    <link rel="stylesheet" href="../css/lesson_search-unregistered.css">
+    <link rel="icon" href="../img/fmi_rs_logo.jpg" type="image/png">
+    <link rel="stylesheet" href="../css/logo.css">
+</head>
+<body>
+    <header>
+        <h1>FMI Room Scheduler</h1>
+        <h2>Уроци</h2>
+        <a href="main.html" class="button"> Към началното меню </a>
+    </header>
+    <main>
+        <section id="LessonSearchForm">
+            <form id="LessonSearchForm">
+
+                <section>
+                    <label for="lesson-name">Име на дисциплина:</label>
+                    <input type="text" id="lesson-name" name="lesson_name" required>
+                </section>
+
+                <section>
+                    <label for="lecture-type">Изберете вид на занятието</label>
+                    <select id="lecture-type" name="lecture-type" required>
+                        <option value="lecture">Лекция</option>
+                        <option value="practical">Практикум</option>
+                        <option value="theoretical">Семинар</option>
+                        <option value="all">Всички</option>
+                    </select>
+                </section>
+                
+                <section>
+                    <label for="startDatePicker">Изберете начална дата:</label>
+                    <input type="date" id="startDate" name="startDate" required>
+                </section>
+                
+                <section>
+                    <label for="endDatePicker">Изберете крайна дата:</label>
+                    <input type="date" id="endDate" name="endDate" required>
+                </section>              
+
+                <button type="submit">Потърси урок</button>
+            </form>
+        </section>
+        <form id="LessonList">
+        </form>
+    </main>
+    <script src="../js/lesson_search-unregistered-script.js"></script>
+</body>
+</html>
