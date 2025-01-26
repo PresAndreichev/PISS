@@ -24,7 +24,7 @@
             lessonName: lessonName, lessonType: type
         });
 
-        const response = await fetch('../py/get_lesson.py', { //May need to redart the PATH 
+        const response = await fetch('/api/get_lesson', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -109,7 +109,7 @@
                 dateAttendanceChecked: dateSaved,
             });
 
-            const response = await fetch('../py/take_attendance.py', { //May need to redart the PATH 
+            const response = await fetch('/api/take_attendance', { //May need to redart the PATH 
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -123,7 +123,7 @@
             if (final_response.success) {
                 alert('Успешно отчетено присъствие!');
 
-                window.location.href = '../html/lesson_search.html';
+                window.location.href = '/static/html/lesson_search.html';
 
             } else {
                 alert('Възникна грешка! Присъствието не беше отчетено!');

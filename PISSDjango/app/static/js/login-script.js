@@ -21,12 +21,12 @@ document.getElementById('login-form').addEventListener('submit', async function 
                 sessionStorage.setItem("username", username);
                 sessionStorage.setItem("role", role);
                 sessionStorage.setItem("password", password);
-                window.location.href = '../html/index.html';
+                window.location.href = '/static/html/index.html';
 
             } else {
 
                 alert("Невалидна роля!");
-                window.location.href = '../html/login.html';
+                window.location.href = '/static/html/login.html';
             }
 
         } else {
@@ -42,7 +42,7 @@ function validateCredentials(username, password) {
     if (username.length < userMinLen || username.length > userMaxLen) {
 
         alert("Невалидни входни данни");
-        window.location.href = '../html/login.html';
+        window.location.href = '/static/html/login.html';
     }
 
     const passwordPattern = /^(?=.*[a-zа-я])(?=.*[A-ZА-Я])(?=.*[0-9])[A-Za-z0-9а-яА-Я]{10,}$/;
@@ -51,7 +51,7 @@ function validateCredentials(username, password) {
     if ((!passwordPattern.test(password)) || password.length < passMinLen) {
 
         alert("Невалидни входни данни");
-        window.location.href = '../html/login.html';
+        window.location.href = '/static/html/login.html';
     }
 
     return true;
@@ -62,7 +62,7 @@ async function validateRegistration(username, password, email) {
 
     const data = JSON.stringify({ username: username, password: password, email: email});
 
-        const response = await fetch('/login/', {
+        const response = await fetch('/api/login/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -76,7 +76,7 @@ async function validateRegistration(username, password, email) {
         if (response.ok && responseJSON.success) {
             localStorage.setItem("authToken", responseJSON.token);
             role = responseJSON.role;
-            window.location.href = '../html/index.html';
+            window.location.href = '/static/html/index.html';
             return true;
 
         } else {

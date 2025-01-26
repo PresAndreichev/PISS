@@ -25,7 +25,7 @@
             lessonName: lessonName, lessonType: type
         });
 
-        const response = await fetch('../py/get_lesson.py', { //May need to redart the PATH 
+        const response = await fetch('/api/get_lesson', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -43,8 +43,8 @@
         note = container.createElement('section');
 
         note.innerHTML = `<p>!Трябва да сте регистриран потребител, ако искате да запазите зала!</p>
-                <p>Ако вече имате регистрация, влезте от тук: <a href="login.html" class="back_buttons">Вход</a></p>
-                <p>Ако още нямате регистрация, влезте от тук: <a href="register.html" class="back_buttons">Регистрация</a></p>
+                <p>Ако вече имате регистрация, влезте от тук: <a href="/static/html/login.html" class="back_buttons">Вход</a></p>
+                <p>Ако още нямате регистрация, влезте от тук: <a href="/static/html/register.html" class="back_buttons">Регистрация</a></p>
          `;
 
         container.appendChild(note);

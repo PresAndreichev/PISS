@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         username: current_user, role: userRole, password: password
     });
 
-    const response = await fetch('../py/get_saved_rooms.py', { //May need to redart the PATH 
+    const response = await fetch('/api/get_saved_rooms', {
          method: 'POST',
          headers: {
                 'Content-Type': 'application/json',

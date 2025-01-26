@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             isComputer: isComputer, hasWhiteBoard: hasWhiteBoard, hasBlackBoard: hasBlackBoard, hasInteractiveBoard: hasInteractiveBoard, hasMedia: hasMedia
         });
 
-        const response = await fetch('../py/get_rooms.py', { //May need to redart the PATH 
+        const response = await fetch('/api/get_rooms', { //May need to redart the PATH 
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -156,7 +156,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                     startTime: startTime, endTime: endTime, dateReservation: dateSaved,
                 });
                     
-                const response = await fetch('../py/reserve_room.py', { //May need to redart the PATH 
+                const response = await fetch('/api/reserve_room', { 
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -170,7 +170,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 if (final_response.success) {
                     alert('Стаята/Залата беше успешно запазена!');
 
-                    window.location.href = '../html/room_search.html';
+                    window.location.href = '/static/html/room_search.html';
 
                 } else {
                     alert('Възникна грешка! Заявката не беше запазена!');

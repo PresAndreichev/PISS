@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             isComputer: isComputer, hasWhiteBoard: hasWhiteBoard, hasBlackBoard: hasBlackBoard, hasInteractiveBoard: hasInteractiveBoard, hasMedia: hasMedia
         });
 
-        const response = await fetch('../py/get_rooms.py', { //May need to redart the PATH 
+        const response = await fetch('/api/get_rooms', { 
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
