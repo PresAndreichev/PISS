@@ -1,10 +1,10 @@
 from django.contrib.auth.hashers import check_password
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from App.models import User
+from app.models import User
 import json
 from django.shortcuts import render
-from App.views.tokens import generate_token
+from app.views.tokens import generate_token
 
 @csrf_exempt  # Disable CSRF for simplicity
 def login_view(request):

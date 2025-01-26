@@ -6,7 +6,7 @@ from django.conf import settings
 
 def serve_html(request, page_name):
     try:
-        file_path = os.path.join(settings.BASE_DIR, 'App/Static/html', f"{page_name}.html")
+        file_path = os.path.join(settings.BASE_DIR, 'app/static/html', f"{page_name}.html")
         with open(file_path, 'r',encoding='utf-8') as file:
             return HttpResponse(file.read(),content_type="text/html")
     except FileNotFoundError:

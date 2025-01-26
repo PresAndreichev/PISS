@@ -24,7 +24,8 @@ SECRET_KEY = 'django-insecure-(dtbt#w*gvf2cpd0+0t!c$%7-a28dwt39*b9q0@c6p8w&=@af-
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-ALLOWED_HOSTS = []
+# First IP address is Antoan's Ip of the VM Debian host
+ALLOWED_HOSTS = ['192.168.100.176', 'localhost', '127.0.0.1']
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -33,7 +34,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'App',
+    'app',
     'django_extensions',
 ]
 
@@ -113,10 +114,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = '/Static/'
+STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'App', 'Static'),
+    os.path.join(BASE_DIR, 'app', 'static'),
 ]
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field

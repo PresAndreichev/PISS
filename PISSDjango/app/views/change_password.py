@@ -1,9 +1,9 @@
 from django.contrib.auth.hashers import check_password, make_password
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from App.models import User
+from app.models import User
 import json
-from App.views.tokens import decode_token
+from app.views.tokens import decode_token
 
 @csrf_exempt  # Disable CSRF for simplicity
 def change_password(request, user_id):

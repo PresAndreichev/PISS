@@ -1,7 +1,7 @@
 from django.contrib.auth.hashers import make_password
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from App.models import User
+from app.models import User
 import json
 
 @csrf_exempt

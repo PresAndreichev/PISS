@@ -12,5 +12,5 @@ urlpatterns = [
     path('register/', register_user, name='register_user'),
     path('login/',lambda request: serve_html(request, 'login'),name='login'), 
     path('index/',lambda request: serve_html(request, 'index'),name='index'), 
-    path('', lambda request: serve_html(request, 'register'), name='register'),  # Homepage route
+    path('', lambda request: serve_html(request, 'index'), name='index'),  # Homepage route
 ]
