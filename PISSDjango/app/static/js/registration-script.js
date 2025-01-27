@@ -1,4 +1,4 @@
-﻿document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function () {
     const roles = document.querySelectorAll('input[name="role"]');
     const targetElement = document.getElementById('fn-field');
     const toggleClass = 'input-fn-disabled';
@@ -7,7 +7,7 @@
         role.addEventListener('change', function () {
             if (role.checked && role.value === '1') {
                 targetElement.classList.remove(toggleClass);
-            } else if (role.checked && role.value === '2' ) {
+            } else if (role.checked && role.value === '2') {
                 targetElement.classList.add(toggleClass);
             }
         });
@@ -28,13 +28,17 @@
         var isValidPW = validatePassword(password)
         var isValidFn = validateFn(role, fn);
         var isValidEmail = validateEmail(email);
-    ;
+        ;
 
         let isValid = isValidUsername && isValidPW && isValidFn && isValidEmail;
 
         if (isValid) {
-            
+
             checkAvailability(username, password, role, email, fn);
+
+        }
+        else {
+            return;
         }
 
     });
@@ -51,7 +55,7 @@
 
             inputCriteriaElements[0].classList.add('input-error');
             inputCriteriaElements[0].classList.remove('input-criteria-right');
-                     
+
 
             return false;
         }
@@ -88,7 +92,7 @@
 
             return false;
         }
-    
+
         inputCriteriaElements[2].classList.add('input-criteria-right');
         inputCriteriaElements[2].classList.remove('input-error');
         return true;
@@ -96,20 +100,36 @@
 
     function validateFn(role, fn) {
 
-        const FN_MAX_LEN = 10;
+        const FN_OLD_LEN = 5;
+        const FN_NEW_LEN = 10;
 
         inputCriteriaElements = document.getElementsByClassName('input-criteria');
 
-        if (role === '1' && fn.length == FN_MAX_LEN) {
+        if (role === '2') {
+
+            inputCriteriaElements[3].classList.add('input-criteria-right');
+            inputCriteriaElements[3].classList.remove('input-error');
+
+            return true;
+
+        }
+        else if (role === '1' && (fn.length == FN_OLD_LEN || fn.length == FN_NEW_LEN)) {
+
+            inputCriteriaElements[3].classList.add('input-criteria-right');
+            inputCriteriaElements[3].classList.remove('input-error');
+            return true;
+
+        }
+        else {
+
+            if (role != '1' && role != '2') {
+                alert("Невалидна стойност на роля");
+            }
 
             inputCriteriaElements[3].classList.add('input-error');
             inputCriteriaElements[3].classList.remove('input-criteria-right');
-
             return false;
         }
-        inputCriteriaElements[3].classList.add('input-criteria-right');
-        inputCriteriaElements[3].classList.remove('input-error');
-        return true;
     }
 
 });
@@ -119,7 +139,7 @@ async function checkAvailability(username, password, role, email, fn) {
     const data = JSON.stringify({ username: username, password: password, role: role, email: email, fn: fn });
 
     try {
-        const response = await fetch('/api/register/', {  
+        const response = await fetch('/register/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -133,7 +153,7 @@ async function checkAvailability(username, password, role, email, fn) {
 
         if (responseJSON.success) {
             alert('Регистрацията беше успешна!');
-            window.location.href = '/static/html/login.html';
+            window.location.href = '/login/';
         } else {
             alert('Съществуващ потребител!');
         }
