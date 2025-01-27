@@ -4,17 +4,19 @@ from datetime import datetime, timedelta
 SECRET_KEY = "ROSITSA_SILVIA_ANTOAN_PRESIAN"
 TOKEN_EXPIRATION_HOURS = 24
 
-def generate_token(user_id):
+def generate_token(user_id, username, role):
     try:
         curr_time = datetime.utcnow()
         exp_time = curr_time + timedelta(hours=TOKEN_EXPIRATION_HOURS)
         
         payload = {
             "user_id": user_id,
+            "username" : username,            
+            "role": role,
             "exp": int(exp_time.timestamp()),  # Expiration time
-            "iat": int(curr_time.timestamp())  # Issued at
+            "iat": int(curr_time.timestamp()),  # Issued at
         }
-        return jwt.encode(payload, SECRET_KEY, algorithm="HS256").decode("utf-8")
+        return jwt.encode(payload, SECRET_KEY, algorithm="HS256")
     except Exception as e:
         raise RuntimeError(f"Token generation failed: {str(e)}")
     

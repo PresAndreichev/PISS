@@ -30,11 +30,9 @@ def login_view(request):
             if not check_password(password, user.password):
                 return JsonResponse({"success": False, "message": "Invalid credentials"}, status=401)
 
-            
-            #token = generate_token(user.id) 
-        
+            token = generate_token(user.id, user.username, user.priority) 
             # maybe change the url as well - generate homepage info based on this
-            return JsonResponse({"success": True, "message": "Login successful", "role": "1"})
+            return JsonResponse({"success": True, "message": "Login successful", "token": token, "role": user.priority})
 
         except Exception as e:
             return JsonResponse({"success": False, "message": str(e)}, status=500)

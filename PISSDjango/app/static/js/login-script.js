@@ -10,16 +10,15 @@ document.getElementById('login-form').addEventListener('submit', async function 
     let isValid = validateCredentials(username, password);
 
     if (isValid) {
-
-        var role;
         let isRegistered = await validateRegistration(username, password);
-        console.log(role);
+        
         if (isRegistered) {
-            if (role == 0 || role == 1) {
+            const role = sessionStorage.getItem('role');
+            if (role == "1" || role == "2") {
 
-                sessionStorage.setItem("username", username);
-                sessionStorage.setItem("role", role);
-                sessionStorage.setItem("password", password);
+                //sessionStorage.setItem("username", username);
+                //sessionStorage.setItem("role", role);
+                //sessionStorage.setItem("password", password);
                 window.location.href = '/static/html/index.html';
 
             } else {
@@ -72,8 +71,9 @@ async function validateRegistration(username, password, email) {
     const responseJSON = await response.json();
         
         if (response.ok && responseJSON.success) {
+            //localStorage is persistent even after closing browser (for tokens), while session is only valid for current tab
             localStorage.setItem("authToken", responseJSON.token);
-            role = 1;
+            sessionStorage.setItem("role", responseJSON.role);
             return true;
 
         } else {
