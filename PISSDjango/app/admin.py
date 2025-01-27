@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import User, Floor, RoomEventReview, SubjectReview, Room, LectureType, RoomEvent, LessonEvent, SubjectGroup, Subject, StudentSpeciality, Student
+from .models import User, Floor, RoomEventReview, SubjectReview, Room, LectureType, RoomEvent, LessonEvent, SubjectGroup, Subject, Student
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
     list_display = ('id', 'username', 'email', 'priority', 'is_profile_disabled')
@@ -40,12 +40,9 @@ class SubjectGroupAdmin(admin.ModelAdmin):
 class SubjectAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'subject_group','ects_credits','weekly_lectures_duration','weekly_exercises_duration','weekly_computer_exercises_duration')
 
-@admin.register(StudentSpeciality)
-class StudentSpecialityAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name')
 
 @admin.register(Student)
 class StudentAdmin(admin.ModelAdmin):
-    list_display = ('id', 'faculty_num', 'speciality', 'is_in_charge_of_students_council_room')
+    list_display = ('faculty_num',)
 
 

@@ -14,30 +14,11 @@ class User(models.Model):
     #objects = models.Manager()  # to stop PyCharm warnings
 
 
-class StudentSpeciality(models.Model):
-    name = models.CharField(max_length=50, unique=True)
-    """ - seed the DB
-    APPLIED_MATHEMATICS = "Applied Mathematics"
-    MATHEMATICS = "Mathematics"
-    DATA_SCIENCE = "Data Science"
-    STATISTICS = "Statistics"
-    INFORMATICS = "Informatics"
-    INFORMATION_SYSTEMS = "Information systems"
-    COMPUTER_SCIENCE = "Computer science"
-    SOFTWARE_ENGINEERING = "Software engineering" 
-    """
-    #objects = models.Manager()  # to stop PyCharm warnings
 
-
-class Student(User):
+class Student(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     faculty_num = models.CharField(max_length=10)
-    speciality = models.ForeignKey(
-        StudentSpeciality,
-        on_delete=models.RESTRICT,
-        null=False,
-        related_name="students"
-    )
-    is_in_charge_of_students_council_room = models.BooleanField(default=False)
-    # function for taking up subject, taking off, finishing subject, rating subject/lesson,
+    #faculty_num = models.CharField(max_length=10, unique=True)
 
-    objects = models.Manager()  # to stop PyCharm warnings
+    def __str__(self):
+        return f"Student: {self.user.username} (Faculty No: {self.faculty_num})"

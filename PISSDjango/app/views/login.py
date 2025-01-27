@@ -34,7 +34,7 @@ def login_view(request):
             #token = generate_token(user.id) 
         
             # maybe change the url as well - generate homepage info based on this
-            return JsonResponse({"success": True, "message": "Login successful"})
+            return JsonResponse({"success": True, "message": "Login successful", "role": "1"})
 
         except Exception as e:
             return JsonResponse({"success": False, "message": str(e)}, status=500)

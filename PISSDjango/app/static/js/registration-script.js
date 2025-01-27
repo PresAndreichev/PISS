@@ -24,14 +24,12 @@ document.addEventListener('DOMContentLoaded', function () {
         const fn = document.getElementById('fn').value;
         const email = document.getElementById('email').value;
 
-        var isValidUsername = validateUsername(username)
-        var isValidPW = validatePassword(password)
+        var isValidUsername = validateUsername(username);
+        var isValidPW = validatePassword(password);
         var isValidFn = validateFn(role, fn);
         var isValidEmail = validateEmail(email);
-        ;
 
         let isValid = isValidUsername && isValidPW && isValidFn && isValidEmail;
-
         if (isValid) {
 
             checkAvailability(username, password, role, email, fn);
@@ -139,7 +137,7 @@ async function checkAvailability(username, password, role, email, fn) {
     const data = JSON.stringify({ username: username, password: password, role: role, email: email, fn: fn });
 
     try {
-        const response = await fetch('/register/', {
+        const response = await fetch('/api/register/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -153,7 +151,7 @@ async function checkAvailability(username, password, role, email, fn) {
 
         if (responseJSON.success) {
             alert('Регистрацията беше успешна!');
-            window.location.href = '/login/';
+            window.location.href = '/static/html/login.html';
         } else {
             alert('Съществуващ потребител!');
         }

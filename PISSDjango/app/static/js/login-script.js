@@ -13,9 +13,9 @@ document.getElementById('login-form').addEventListener('submit', async function 
 
         var role;
         let isRegistered = await validateRegistration(username, password);
-        
+        console.log(role);
         if (isRegistered) {
-            if (role == 1 || role == 2) {
+            if (role == 0 || role == 1) {
 
                 sessionStorage.setItem("username", username);
                 sessionStorage.setItem("role", role);
@@ -23,7 +23,6 @@ document.getElementById('login-form').addEventListener('submit', async function 
                 window.location.href = '/static/html/index.html';
 
             } else {
-
                 alert("Невалидна роля!");
                 window.location.href = '/static/html/login.html';
             }
@@ -41,7 +40,7 @@ function validateCredentials(username, password) {
     if (username.length < userMinLen || username.length > userMaxLen) {
 
         alert("Невалидни входни данни");
-        window.location.href = '/static/html/login.html';
+        //window.location.href = '/static/html/login.html';
     }
 
     const passwordPattern = /^(?=.*[a-zа-я])(?=.*[A-ZА-Я])(?=.*[0-9])[A-Za-z0-9а-яА-Я]{10,}$/;
@@ -50,7 +49,7 @@ function validateCredentials(username, password) {
     if ((!passwordPattern.test(password)) || password.length < passMinLen) {
 
         alert("Невалидни входни данни");
-        window.location.href = '/static/html/login.html';
+        //window.location.href = '/static/html/login.html';
     }
 
     return true;
@@ -71,10 +70,10 @@ async function validateRegistration(username, password, email) {
         });
 
     const responseJSON = await response.json();
-
+        
         if (response.ok && responseJSON.success) {
             localStorage.setItem("authToken", responseJSON.token);
-            role = responseJSON.role;
+            role = 1;
             return true;
 
         } else {
