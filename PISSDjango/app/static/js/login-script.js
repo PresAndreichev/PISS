@@ -15,7 +15,6 @@ document.getElementById('login-form').addEventListener('submit', async function 
         let isRegistered = await validateRegistration(username, password);
         
         if (isRegistered) {
-
             if (role == 1 || role == 2) {
 
                 sessionStorage.setItem("username", username);
@@ -76,13 +75,11 @@ async function validateRegistration(username, password, email) {
         if (response.ok && responseJSON.success) {
             localStorage.setItem("authToken", responseJSON.token);
             role = responseJSON.role;
-            window.location.href = '/static/html/index.html';
             return true;
 
         } else {
             return false;
         }
-
 }
 
 

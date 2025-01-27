@@ -1,19 +1,23 @@
 import jwt
 from datetime import datetime, timedelta
 
-
 SECRET_KEY = "ROSITSA_SILVIA_ANTOAN_PRESIAN"
 TOKEN_EXPIRATION_HOURS = 24
 
 def generate_token(user_id):
-    payload = {
-        "user_id": user_id,
-        "exp": datetime.now() + timedelta(hours=TOKEN_EXPIRATION_HOURS),  # Expiration time
-        "iat": datetime.now()
-    }
-    return jwt.encode(payload, SECRET_KEY, algorithm="HS256")
-
-
+    try:
+        curr_time = datetime.utcnow()
+        exp_time = curr_time + timedelta(hours=TOKEN_EXPIRATION_HOURS)
+        
+        payload = {
+            "user_id": user_id,
+            "exp": int(exp_time.timestamp()),  # Expiration time
+            "iat": int(curr_time.timestamp())  # Issued at
+        }
+        return jwt.encode(payload, SECRET_KEY, algorithm="HS256").decode("utf-8")
+    except Exception as e:
+        raise RuntimeError(f"Token generation failed: {str(e)}")
+    
 def decode_token(token):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])

@@ -16,7 +16,7 @@ def register_user(request):
             # All required fields are filled?
             if not username or not email or not password:
                 return JsonResponse({"success": False, "message": "Missing fields"}, status=400)
-            print(username, email, password)
+            
             # User already exists?
             if User.objects.filter(username=username).exists() or User.objects.filter(email=email).exists():
                 # Return success for security reasons but do not create a new user
