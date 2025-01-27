@@ -10,7 +10,7 @@ body {
 }
 
 header {
-    margin-top: 15vh;
+    margin-top: 35vh;
     text-align: center;
 }
 
@@ -78,6 +78,6 @@ img {
     display: inline-block;
     justify-content: center; 
     align-items: center; 
-    height: 30vh;
+    height: 40vh;
     border-radius: 30%;
 }
