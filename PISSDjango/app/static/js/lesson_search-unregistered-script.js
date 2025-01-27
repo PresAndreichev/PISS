@@ -60,6 +60,8 @@
                 type = "Практикум";
             } else if (lessonType == "theoretical"){
                 type = "Семинар";
+            } else if (lessonType == "guest-lecture"){
+                type = "Гост лекция";
             }
 
             lessonElement.innerHTML = `           
