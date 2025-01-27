@@ -15,21 +15,12 @@ document.getElementById('login-form').addEventListener('submit', async function 
         if (isRegistered) {
             const role = sessionStorage.getItem('role');
             if (role == "1" || role == "2") {
-
-                //sessionStorage.setItem("username", username);
-                //sessionStorage.setItem("role", role);
-                //sessionStorage.setItem("password", password);
                 window.location.href = '/static/html/index.html';
-
-            } else {
-                alert("Невалидна роля!");
-                window.location.href = '/static/html/login.html';
             }
-
-        } else {
-            alert("Нерегистриран потребител!");
         }
     }
+    alert("Невалидни входни данни!");
+    //window.location.href = '/static/html/login.html';
 });
 
 function validateCredentials(username, password) {
@@ -37,18 +28,14 @@ function validateCredentials(username, password) {
     const userMaxLen = 12;
 
     if (username.length < userMinLen || username.length > userMaxLen) {
-
-        alert("Невалидни входни данни");
-        //window.location.href = '/static/html/login.html';
+        return false;
     }
 
     const passwordPattern = /^(?=.*[a-zа-я])(?=.*[A-ZА-Я])(?=.*[0-9])[A-Za-z0-9а-яА-Я]{10,}$/;
     const passMinLen = 10;
 
     if ((!passwordPattern.test(password)) || password.length < passMinLen) {
-
-        alert("Невалидни входни данни");
-        //window.location.href = '/static/html/login.html';
+        return false;
     }
 
     return true;
