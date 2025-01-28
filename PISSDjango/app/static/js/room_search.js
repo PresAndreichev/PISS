@@ -23,10 +23,18 @@ function generateTimeOptions(offset = 0) {
 
 }
 
+
+
+
 document.addEventListener('DOMContentLoaded', async function () {
 
-    const current_user = sessionStorage['username'];
-    const userRole = sessionStorage['role'];
+    // We could change it to just not sending anything in JSON depending on how you made the tokens work
+    const referedPage = current_user === undefined ? 'nachalno' : 'glavno';
+    const referedPageSite = current_user === undefined ? "/static/html/main.html" : "/static/html/index.html";
+    const headerText = "Obratno kym " + referedPage + " menu";
+    const headerButton = document.querySelector('header > a');
+    headerButton.textContent = headerText
+    headerButton.setAttribute("href", referedPageSite);
 
     const startTimeSelect = document.getElementById('startTime');
     const endTimeSelect = document.getElementById('endTime');
@@ -48,6 +56,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         const hasBlackBoard = document.getElementById('white').checked;
         const hasInteractiveBoard = document.getElementById('white').checked;
         const hasMedia = document.getElementById('media').checked; // 1 has media, 0 - has no media
+        const minCapacity = document.getElementById('capacity').value;
 
         if (startTime >= endTime) {
             alert('Началният час трябва да бъде преди крайния час!');
@@ -55,11 +64,12 @@ document.addEventListener('DOMContentLoaded', async function () {
         }
 
         const data = JSON.stringify({
-            username: current_user, role: userRole, date: date, startTime: startTime, endTime: endTime,
-            isComputer: isComputer, hasWhiteBoard: hasWhiteBoard, hasBlackBoard: hasBlackBoard, hasInteractiveBoard: hasInteractiveBoard, hasMedia: hasMedia
+            date: date, startTime: startTime, endTime: endTime,
+            isComputer: isComputer, hasWhiteBoard: hasWhiteBoard, hasBlackBoard: hasBlackBoard, hasInteractiveBoard: hasInteractiveBoard, hasMedia: hasMedia,
+            minCapacity: minCapacity, token: token
         });
 
-        const response = await fetch('/api/get_rooms', { //May need to redart the PATH 
+        const response = await fetch('/api/get_rooms', { 
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -70,9 +80,8 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         const response_data = await response.json();
 
-        const container = document.getElementById('roomSelectionForm');
-
-        const radioGroupName = 'roomSelection';
+        const container = document.getElementById('roomList');
+        container.innerHTML = '';
 
         let roomSeqNumber = 1;
 
@@ -80,7 +89,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             const roomElement = document.createElement('section');
 
             let isComp, black, white, inter, media;
-
+            // SAVE THE ID SOMEWHERE TO POST A REQUEST based on the card
             if (room.isComputer) {
                 isComp = "Компютърна";
             } else {
@@ -112,10 +121,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             }
 
             roomElement.innerHTML = `
-            <label>
-                <input type="radio" name="${radioGroupName}" value="${room.roomNumber}">
-                <strong>${roomSeqNumber}. Стая/Зала: ${room.roomNumber}</strong>
-            </label>
+            <strong> ${roomSeqNumber}. Стая/Зала: ${room.roomNumber}</strong>
             <p>Вид стая - ${isComp}</p>
             <p>Вид дъска - </p>
             <p>    Черна - ${black}</p>
@@ -129,54 +135,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             roomSeqNumber++;
         });
 
-        const containerSubmit = document.createElement('p');
-        containerSubmit.innerHTML = `
-        <button type="submit" class= "fixed-footer">Запази стая</button>
-        `;
-        container.appendChild(containerSubmit);
         
-        reserved_room = document.getElementById('roomSelectionForm');
-
-        reserved_room.addEventListener('submit', async function () {
-
-                event.preventDefault();
-
-                const selectedRoom = document.querySelector('input[name="roomSelection"]:checked');
-                if (!selectedRoom) {
-                    alert('Моля, изберете стая преди да запазите!');
-                    return;
-                }
-
-                const roomNumber = selectedRoom.value;                
-
-                dateSaved = date_time_now();
-
-                roomDataJSON = JSON.stringify({
-                    username: current_user, role: userRole, roomNumber: roomNumber, date: date,
-                    startTime: startTime, endTime: endTime, dateReservation: dateSaved,
-                });
-                    
-                const response = await fetch('/api/reserve_room', { 
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    },
-                    body: roomDataJSON
-                });
-
-                final_response = await response.json();
-
-                if (final_response.success) {
-                    alert('Стаята/Залата беше успешно запазена!');
-
-                    window.location.href = '/static/html/room_search.html';
-
-                } else {
-                    alert('Възникна грешка! Заявката не беше запазена!');
-                }
-
-        });
     });
 });
     
