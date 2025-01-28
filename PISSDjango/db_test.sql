@@ -1,11 +1,11 @@
-INSERT INTO LectureType (type)
+INSERT INTO App_lecturetype (type)
 VALUES
 ('Lecture'),
 ('Seminar'),
 ('Practicum'),
 ('GuestLecture');
 	
-INSERT INTO Floor (number)
+INSERT INTO App_floor (number)
 VALUES
 (0),
 (1),
@@ -14,7 +14,7 @@ VALUES
 (4),
 (5);
 
-INSERT INTO Room (floor, characteristics, number, seats)
+INSERT INTO App_room (floor_id, characteristics, number, seats)
 VALUES
 (1, 146, 2, 50),
 (2, 148, 101, 120),
@@ -25,7 +25,7 @@ VALUES
 (4, 146, 325, 100),
 (1, 146, 1, 70);
 
-INSERT INTO SubjectGroup (name)
+INSERT INTO App_subjectgroup (name)
 VALUES
 ('MATH'),
 ('APPLIED_MATH'),
@@ -34,7 +34,7 @@ VALUES
 ('CSP'),
 ('OTHERS');
 
-INSERT INTO Subject (subject_group, ects_credits, name, weekly_computer_exercises_duration, weekly_exercises_duration, weekly_lecture_duration)
+INSERT INTO App_subject (subject_group_id, ects_credits, name, weekly_computer_exercises_duration, weekly_exercises_duration, weekly_lectures_duration)
 VALUES
 (1, 7, 'Теория на множествата', 0, 2, 2),
 (1, 5, 'Линейна алгебра', 0, 2, 3),
@@ -45,7 +45,7 @@ VALUES
 (5, 2.5, 'Увод в програмирането - практикум', 2, 0, 0),
 (6, 2.5, 'Философия на математиката', 0, 0, 2);
 
-INSERT INTO User (email, is_profile_disabled, password, priority, username)
+INSERT INTO App_user (email, is_profile_disabled, password, priority, username)
 VALUES
 ('boris_georgiev1998@gmail.com', 0, 'starwarsisC00L', 2, 'bobygeorg'),
 ('gergana_ivanova@gmail.com', 1, 'GeriIvanova22', 1, 'geryivanova'),
@@ -61,14 +61,14 @@ VALUES
 ('stanimir_gospodinov@gmail.com', 0, 'StaniGospodinov1', 2, 'stanimir'),
 ('anita_peneva@gmail.com', 0, 'AnitaPeneva90', 2, 'anitapeneva');
 
-INSERT INTO Student (user_ptr, faculty_num)
+INSERT INTO App_student (user_ptr_id, faculty_num)
 VALUES
 (4, '1MI0600044'),
 (5, '9MI0700010'),
 (6, '4MI0600104'),	
 (2, '2MI0800231');
 
-INSERT INTO RoomEvent (host, room, date, start_time, end_time, topic)
+INSERT INTO App_roomevent (host_id, room_id, date, start_time, end_time, topic)
 VALUES
 (1, 1, '2025-01-27', '10:00:00', '12:00:00', 'Въведение в Алгоритмите'),
 (3, 2, '2025-01-28', '14:00:00', '16:00:00', 'Основи на Линейната Алгебра'),
@@ -86,7 +86,7 @@ VALUES
 (1, 2,'2025-02-13', '12:00:00', '14:00:00', 'Обединение на множества'),
 (12, 8, '2025-02-14', '10:00:00', '12:00:00', 'Смисълът на математиката');
 
-INSERT INTO LessonEvent (roomevent_ptr, lecture_type, subject)
+INSERT INTO App_lessonevent (roomevent_ptr_id, lecture_type_id, subject_id)
 VALUES
 (1, 1, 5),
 (2, 4, 2),
