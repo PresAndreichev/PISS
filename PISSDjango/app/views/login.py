@@ -3,9 +3,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from app.models import User
 import json
-from django.shortcuts import render
 from app.views.tokens import generate_token
-from django.contrib.auth.hashers import make_password
 
 @csrf_exempt  # Disable CSRF for simplicity
 def login_view(request):

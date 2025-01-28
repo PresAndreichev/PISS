@@ -49,6 +49,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         const hasBlackBoard = document.getElementById('white').checked;
         const hasInteractiveBoard = document.getElementById('white').checked;
         const hasMedia = document.getElementById('media').checked; // 1 has media, 0 - has no media
+        const minCapacity = document.getElementById('capacity').value;
 
         if (startTime >= endTime) {
             alert('Началният час трябва да бъде преди крайния час!');
@@ -57,7 +58,8 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         const data = JSON.stringify({
             username: current_user, role: userRole, date: date, startTime: startTime, endTime: endTime,
-            isComputer: isComputer, hasWhiteBoard: hasWhiteBoard, hasBlackBoard: hasBlackBoard, hasInteractiveBoard: hasInteractiveBoard, hasMedia: hasMedia
+            isComputer: isComputer, hasWhiteBoard: hasWhiteBoard, hasBlackBoard: hasBlackBoard, hasInteractiveBoard: hasInteractiveBoard, hasMedia: hasMedia,
+            minCapacity: minCapacity
         });
 
         const response = await fetch('/api/get_rooms', { 
@@ -89,7 +91,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             const roomElement = document.createElement('section');
 
             let isComp, black, white, inter, media;
-
+            // SAVE THE ID SOMEWHERE TO POST A REQUEST based on the card
             if (room.isComputer) {
                 isComp = "Компютърна";
             } else {
