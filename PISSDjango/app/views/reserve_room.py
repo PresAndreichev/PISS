@@ -1,7 +1,7 @@
 from django.http import JsonResponse
-from app.models import Room, RoomEvent, User
+from app.models import RoomEvent
 from django.views.decorators.csrf import csrf_exempt
-from jwt import decode as jwt_decode, exceptions
+from app.views.tokens import decode_token
 from datetime import datetime
 import json
 
@@ -28,7 +28,7 @@ def reserve_room(request):
         role = 1  # Default to student
         user_id = None
         try:
-            decoded_token = jwt_decode(token, options={"verify_signature": False})
+            decoded_token = decode_token(token)
             role = decoded_token.get('role', 1)
             user_id = decoded_token.get('user_id')
         except Exception as e:
@@ -44,18 +44,18 @@ def reserve_room(request):
         if start_time_obj >= end_time_obj:
             return JsonResponse({"success": False, "message": "Start time must be before end time."}, status=400)
 
-
-
         overlapping_events = RoomEvent.objects.filter(
             room_id=room_id,
             date=date_obj,
             start_time__lt=end_time_obj,
             end_time__gt=start_time_obj,
         )
+
         # Check too see if all the events can be overriden
         for event in overlapping_events:
             host_priority = event.host.priority 
-            if host_priority == 2: # Teacher attempting to book, can override
+
+            if host_priority == 2: # Attempting to book another Teacher over, cannot override
                 return JsonResponse({
                     "success": False,
                     "message": "Room is already booked by a teacher during the selected time."
