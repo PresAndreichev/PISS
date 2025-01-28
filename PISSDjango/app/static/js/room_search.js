@@ -15,7 +15,7 @@
 
 function generateTimeOptions(offset = 0) {
     const timeOptions = [];
-    for (let i = 6 + offset; i < 24 + offset; i++) {
+    for (let i = 6 + offset; i < 23 + offset; i++) {
         const time = `${i.toString().padStart(2, '0')}:00`; // Format as "00:00"
         timeOptions.push(`<option value="${time}">${time}</option>`);
     }

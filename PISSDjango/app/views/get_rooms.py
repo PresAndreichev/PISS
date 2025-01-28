@@ -89,6 +89,8 @@ def get_rooms(request):
             room_type, must_have_white_board, must_have_black_board,
             must_have_interactive_board, must_have_media
             )
+        available_rooms = sorted(available_rooms, key=lambda x: (-x.seats, x.number))
+
  
         result = [
             {
