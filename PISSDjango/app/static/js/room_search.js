@@ -28,10 +28,24 @@ function generateTimeOptions(offset = 0) {
 
 document.addEventListener('DOMContentLoaded', async function () {
 
+    const token = localStorage.getItem('token');
+
+    let current_user = undefined;
+    if (token==undefined){
+        try {
+            const decoded = jwt_decode(token);
+            const username = decoded.username || decoded.user_id; 
+            current_user = username;
+        } catch (e) {
+            console.error("Error decoding token:", e);
+        }
+    }
+
+
     // We could change it to just not sending anything in JSON depending on how you made the tokens work
-    const referedPage = current_user === undefined ? 'nachalno' : 'glavno';
+    const referedPage = current_user === undefined ? 'начално' : 'главно';
     const referedPageSite = current_user === undefined ? "/static/html/main.html" : "/static/html/index.html";
-    const headerText = "Obratno kym " + referedPage + " menu";
+    const headerText = "Обратно към " + referedPage + " меню";
     const headerButton = document.querySelector('header > a');
     headerButton.textContent = headerText
     headerButton.setAttribute("href", referedPageSite);
@@ -57,19 +71,25 @@ document.addEventListener('DOMContentLoaded', async function () {
         const hasInteractiveBoard = document.getElementById('white').checked;
         const hasMedia = document.getElementById('media').checked; // 1 has media, 0 - has no media
         const minCapacity = document.getElementById('capacity').value;
-
+        console.log(date, startTime, endTime, isComputer, hasWhiteBoard, hasBlackBoard, hasInteractiveBoard, hasMedia, minCapacity);
         if (startTime >= endTime) {
             alert('Началният час трябва да бъде преди крайния час!');
             return;
         }
+        let data;
+        if(token == undefined){    
+            data = JSON.stringify({ "date": date, "startTime": startTime, "endTime": endTime, "isComputer": isComputer, "hasWhiteBoard": hasWhiteBoard,
+                "hasBlackBoard": hasBlackBoard, "hasInteractiveBoard": hasInteractiveBoard, "hasMedia": hasMedia,"minCapacity": minCapacity
+            });
+        }
+        else{
+            data = JSON.stringify({date: date, startTime: startTime, endTime: endTime, isComputer: isComputer,
+                hasWhiteBoard: hasWhiteBoard, hasBlackBoard: hasBlackBoard, hasInteractiveBoard: hasInteractiveBoard,
+                hasMedia: hasMedia,minCapacity: minCapacity, token: token
+            });
+        }
 
-        const data = JSON.stringify({
-            date: date, startTime: startTime, endTime: endTime,
-            isComputer: isComputer, hasWhiteBoard: hasWhiteBoard, hasBlackBoard: hasBlackBoard, hasInteractiveBoard: hasInteractiveBoard, hasMedia: hasMedia,
-            minCapacity: minCapacity, token: token
-        });
-
-        const response = await fetch('/api/get_rooms', { 
+        const response = await fetch('/api/get_rooms/', { 
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

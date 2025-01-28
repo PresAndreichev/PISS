@@ -2,6 +2,7 @@ from django.http import JsonResponse
 from app.models import Room, RoomEvent
 from datetime import datetime
 import json
+from django.views.decorators.csrf import csrf_exempt
 
 def filter_rooms(room_type, must_have_white_board, must_have_black_board, must_have_interactive_board, must_have_media):
     """With all available rooms, filter them by characteristics (!NB!) - this cannot be done in the DB, since we use BITS"""
@@ -28,11 +29,13 @@ def filter_rooms(room_type, must_have_white_board, must_have_black_board, must_h
         available_rooms = [room for room in available_rooms if room.has_media()]
     return available_rooms
  
-
-def get_free_rooms(request):
+@csrf_exempt
+def get_rooms(request):
     if request.method == 'POST':
-        data = json.loads(request.body)
- 
+        try:
+            data = json.loads(request.body)
+        except json.JSONDecodeError:
+            return JsonResponse({"success": False, "message": "Invalid JSON format."}, status=400)
         # maybe sent the token here to extract the role and not sent it otherwise?
         # if no token, you are student
         role = data.get('role')  # Role: 1 (Student) or 2 (Teacher)
@@ -45,7 +48,16 @@ def get_free_rooms(request):
         must_have_interactive_board = data.get('hasInteractiveBoard', False)
         must_have_media = data.get('hasMedia', False)
         min_capacity = data.get('minCapacity', 25)
- 
+        print(role)
+        print(date)
+        print(start_time)
+        print(end_time)
+        print(room_type)
+        print(must_have_white_board)
+        print(must_have_black_board)
+        print(must_have_interactive_board)
+        print(must_have_media)
+        print(min_capacity)
         try:
             date_obj = datetime.strptime(date, '%Y-%m-%d').date()
             start_time_obj = datetime.strptime(start_time, '%H:%M').time()
@@ -55,7 +67,7 @@ def get_free_rooms(request):
  
         # Find the overlapping roomEvents
 
-        available_rooms = Room.objects.filters(
+        available_rooms = Room.objects.filter(
             seats__gte=min_capacity,
         ).exclude( # Exclude events which
             id__in=RoomEvent.objects.filter(
