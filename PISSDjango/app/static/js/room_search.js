@@ -58,7 +58,8 @@ document.addEventListener('DOMContentLoaded', async function () {
     room_filters = document.getElementById('timeSelectionForm');
 
     room_filters.addEventListener('submit', async function () {
-
+        const container = document.getElementById('roomSelectionForm');
+        
         event.preventDefault();
 
         const date = new Date(document.getElementById('datePicker').value).toISOString().split('T')[0];
@@ -99,15 +100,19 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         const response_data = await response.json();
 
-        const container = document.getElementById('roomSelectionForm');
-        container.removeAttribute('hidden');
-        const roomList = document.getElementById('roomList');
+        const topicContainer = document.getElementById('sessionTopic');
+        topicContainer.display.style = 'none';
+        const header = document.querySelector('#roomSelectionForm>h2');
+        topicContainer.removeAttribute('required');
 
         let roomSeqNumber = 1;
-
         response_data.rooms.forEach(room => {
+            container.style.display = 'flex';
+            topicContainer.setAttribute('required', "true"); // reset in order when we have no rooms to reserve
+            header.style.display = 'block';
+            topicContainer.display.style = 'block';
+
             let isComp, black, white, inter, media;
-            // SAVE THE ID SOMEWHERE TO POST A REQUEST based on the card
             if (room.isComputer) {
                 isComp = "Компютърна";
             } else {
@@ -141,8 +146,11 @@ document.addEventListener('DOMContentLoaded', async function () {
             const roomElement = document.createElement('section');
             roomElement.setAttribute('data', room.id);
             roomElement.style.display = 'flex';
+            roomElement.style.justifyContent = "center";
+            roomElement.style.alignItems = "center";
 
             const roomDescription = document.createElement('div');
+            roomDescription.style.flexGrow = 1
             roomDescription.innerHTML = `
             <strong> ${roomSeqNumber}. Стая/Зала: ${room.roomNumber}</strong>
             <p>Вид стая - ${isComp}</p>
@@ -158,12 +166,18 @@ document.addEventListener('DOMContentLoaded', async function () {
             roomElement.appendChild(roomDescription);
 
             if (token != null) {
+                //topicContainer.removeAttribute('hidden');
+                topicContainer.style.display = 'flex';
+                topicContainer.setAttribute('required', "true");
+                const topic = topicContainer.value;
                 const reserveButton = document.createElement('button');
                 reserveButton.textContent = 'Резервирай';
-                reserveButton.style.maxHeight = 100;
+                reserveButton.style.flexGrow = 1
+
+
                 reserveButton.addEventListener('click', async function () {
                     const room_id = room.id;
-                    const data = JSON.stringify({ room_id: room_id, date: date, startTime: startTime, endTime: endTime, token: token});
+                    const data = JSON.stringify({ room_id: room_id, date: date, startTime: startTime, endTime: endTime, token: token, topic: topic });
                     const response = await fetch('/api/reserve_room/', {
                         method: 'POST',
                         headers: {
@@ -175,8 +189,10 @@ document.addEventListener('DOMContentLoaded', async function () {
 
                     if (response.status === 200) {
                         alert('Успешно резервирахте стаята!');
+                        window.location.href = '/static/html/index.html';
                     } else {
                         alert('Неуспешно резервиране на стаята!');
+                        window.location.href = '/static/html/get_rooms.html';
                     }
                 });
                 

@@ -115,3 +115,14 @@ a {
     a:hover {
         background-color: #2980b9;
     }
+
+
+#roomSelectionForm {
+    display: none;
+    justify-content: center;
+    flex-direction: column;
+}
+
+#roomSelectionForm>h2,#roomSelectionForm>input {
+    text-align: center;
+}
