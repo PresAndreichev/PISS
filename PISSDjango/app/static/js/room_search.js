@@ -28,10 +28,9 @@ function generateTimeOptions(offset = 0) {
 
 document.addEventListener('DOMContentLoaded', async function () {
 
-    const token = localStorage.getItem('token');
-
+    const token = localStorage.getItem('authToken');
     let current_user = undefined;
-    if (token==undefined){
+    if (token!=null){
         try {
             const decoded = jwt_decode(token);
             const username = decoded.username || decoded.user_id; 
@@ -62,13 +61,13 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         event.preventDefault();
 
-        const date = new Date(document.getElementById('datePicker').value);
+        const date = new Date(document.getElementById('datePicker').value).toISOString().split('T')[0];
         const startTime = document.getElementById('startTime').value;
         const endTime = document.getElementById('endTime').value;
         const isComputer = document.getElementById('isComputer').value; //1 - isComp, 0 - is normal
         const hasWhiteBoard = document.getElementById('white').checked;
-        const hasBlackBoard = document.getElementById('white').checked;
-        const hasInteractiveBoard = document.getElementById('white').checked;
+        const hasBlackBoard = document.getElementById('black').checked;
+        const hasInteractiveBoard = document.getElementById('interactive').checked;
         const hasMedia = document.getElementById('media').checked; // 1 has media, 0 - has no media
         const minCapacity = document.getElementById('capacity').value;
         console.log(date, startTime, endTime, isComputer, hasWhiteBoard, hasBlackBoard, hasInteractiveBoard, hasMedia, minCapacity);
@@ -77,7 +76,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             return;
         }
         let data;
-        if(token == undefined){    
+        if(token == null){    
             data = JSON.stringify({ "date": date, "startTime": startTime, "endTime": endTime, "isComputer": isComputer, "hasWhiteBoard": hasWhiteBoard,
                 "hasBlackBoard": hasBlackBoard, "hasInteractiveBoard": hasInteractiveBoard, "hasMedia": hasMedia,"minCapacity": minCapacity
             });
@@ -85,7 +84,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         else{
             data = JSON.stringify({date: date, startTime: startTime, endTime: endTime, isComputer: isComputer,
                 hasWhiteBoard: hasWhiteBoard, hasBlackBoard: hasBlackBoard, hasInteractiveBoard: hasInteractiveBoard,
-                hasMedia: hasMedia,minCapacity: minCapacity, token: token
+                hasMedia: hasMedia,minCapacity: minCapacity
             });
         }
 
@@ -100,14 +99,13 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         const response_data = await response.json();
 
-        const container = document.getElementById('roomList');
-        container.innerHTML = '';
+        const container = document.getElementById('roomSelectionForm');
+        container.removeAttribute('hidden');
+        const roomList = document.getElementById('roomList');
 
         let roomSeqNumber = 1;
 
         response_data.rooms.forEach(room => {
-            const roomElement = document.createElement('section');
-
             let isComp, black, white, inter, media;
             // SAVE THE ID SOMEWHERE TO POST A REQUEST based on the card
             if (room.isComputer) {
@@ -140,17 +138,52 @@ document.addEventListener('DOMContentLoaded', async function () {
                 media = "Не";
             }
 
-            roomElement.innerHTML = `
+            const roomElement = document.createElement('section');
+            roomElement.setAttribute('data', room.id);
+            roomElement.style.display = 'flex';
+
+            const roomDescription = document.createElement('div');
+            roomDescription.innerHTML = `
             <strong> ${roomSeqNumber}. Стая/Зала: ${room.roomNumber}</strong>
             <p>Вид стая - ${isComp}</p>
-            <p>Вид дъска - </p>
-            <p>    Черна - ${black}</p>
-            <p>    Бяла - ${white}</p>
+            <p>Вид дъска:</p>
+            <ul type='none'>
+            <li>    Черна - ${black}</li>
+            <li>    Бяла - ${white}</li>
+            </ul>
             <p>    Интерактивна - ${inter}</p>
             <p>Налична мултимедия - ${media}</p>
             <p>Капацитет - ${room.seatsCount}</p>
             `;
+            roomElement.appendChild(roomDescription);
 
+            if (token != null) {
+                const reserveButton = document.createElement('button');
+                reserveButton.textContent = 'Резервирай';
+                reserveButton.style.maxHeight = 100;
+                reserveButton.addEventListener('click', async function () {
+                    const room_id = room.id;
+                    const data = JSON.stringify({ room_id: room_id, date: date, startTime: startTime, endTime: endTime, token: token});
+                    const response = await fetch('/api/reserve_room/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        },
+                        body: data
+                    });
+
+                    if (response.status === 200) {
+                        alert('Успешно резервирахте стаята!');
+                    } else {
+                        alert('Неуспешно резервиране на стаята!');
+                    }
+                });
+                
+                roomElement.appendChild(reserveButton);
+            }
+
+            
             container.appendChild(roomElement);
             roomSeqNumber++;
         });

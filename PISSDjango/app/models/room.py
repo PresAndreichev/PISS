@@ -16,35 +16,35 @@ class Room(models.Model):
         return self.characteristics & CONVERTED_TO_INT_BINARY == CONVERTED_TO_INT_BINARY
 
     def is_computer_room(self):
-        IS_PC_ROOM_BIT = 'Ob1'
+        IS_PC_ROOM_BIT = '0b1'
         return self.__bit_is_as_expected(IS_PC_ROOM_BIT)
 
     def has_white_board(self):
-        HAS_WHITE_BOARD_BIT = 'Ob10'
+        HAS_WHITE_BOARD_BIT = '0b10'
         return self.__bit_is_as_expected(HAS_WHITE_BOARD_BIT)
 
     def has_black_board(self):
-        HAS_BLACK_BOARD_BIT = 'Ob100'
+        HAS_BLACK_BOARD_BIT = '0b100'
         return self.__bit_is_as_expected(HAS_BLACK_BOARD_BIT)
 
     def has_interactive_board(self):
-        HAS_INTERACTIVE_BOARD_BIT = 'Ob1000'
+        HAS_INTERACTIVE_BOARD_BIT = '0b1000'
         return self.__bit_is_as_expected(HAS_INTERACTIVE_BOARD_BIT)
 
     def has_media(self):
-        HAS_MEDIA_BIT = 'Ob10000'
+        HAS_MEDIA_BIT = '0b10000'
         return self.__bit_is_as_expected(HAS_MEDIA_BIT)
 
     def is_class_running(self):
-        IS_CLASS_RUNNING_BIT = 'Ob100000'
+        IS_CLASS_RUNNING_BIT = '0b100000'
         return self.__bit_is_as_expected(IS_CLASS_RUNNING_BIT)
 
     def is_locked(self):
-        IS_LOCKED_BIT = 'Ob1000000'
+        IS_LOCKED_BIT = '0b1000000'
         return self.__bit_is_as_expected(IS_LOCKED_BIT)
 
     def does_function(self):
-        DOES_FUNCTION_BIT = 'Ob10000000'
+        DOES_FUNCTION_BIT = '0b10000000'
         return self.__bit_is_as_expected(DOES_FUNCTION_BIT)
 
     # isReservedTime da se napravi zaedno s generateTimeTable

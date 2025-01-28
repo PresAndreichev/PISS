@@ -25,19 +25,19 @@
 
                 <section>
                     <label for="startTime">Начално време:</label>
-                    <select id="startTime" name="startTime" required>
+                    <select id="startTime" name="startTime" >
                     </select>
                 </section>
 
                 <section>
                     <label for="endTime">Крайно време:</label>
-                    <select id="endTime" name="endTime" required>
+                    <select id="endTime" name="endTime" >
                     </select>
                 </section>
 
                 <section>
                     <label for="isComputer">Изберете вида на стаята</label>
-                    <select id="isComputer" name="isComputer" required>
+                    <select id="isComputer" name="isComputer">
                         <option value="0" selected>Без значение</option>
                         <option value="1">Компютърна</option>
                         <option value="2">Обикновена</option>
@@ -65,13 +65,15 @@
 
                 <section>
                     <label for="capacity">Нужен минимален капацитет:</label>
-                    <input type="number" id="capacity" name="capacity" min="0" max="300" value="25" required>
+                    <input type="number" id="capacity" name="capacity" min="0" max="300" value="25" >
                 </section>
 
                 <button type="submit">Потърси стая</button>
             </form>
         </section>
-        <section id="roomSelectionForm"></section>
+        <section id="roomSelectionForm" hidden>
+            <h2>Изберете стая</h2>
+        </section>
     </main>
     <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
     <script src="../js/helper/past_date_check.js"></script>
