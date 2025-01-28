@@ -71,7 +71,6 @@ document.addEventListener('DOMContentLoaded', async function () {
         const hasInteractiveBoard = document.getElementById('interactive').checked;
         const hasMedia = document.getElementById('media').checked; // 1 has media, 0 - has no media
         const minCapacity = document.getElementById('capacity').value;
-        console.log(date, startTime, endTime, isComputer, hasWhiteBoard, hasBlackBoard, hasInteractiveBoard, hasMedia, minCapacity);
         if (startTime >= endTime) {
             alert('Началният час трябва да бъде преди крайния час!');
             return;
@@ -102,7 +101,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         const topicContainer = document.getElementById('sessionTopic');
         topicContainer.display.style = 'none';
-        const header = document.querySelector('#roomSelectionForm>h2');
+        const header = document.querySelector('#roomSelectionForm > h2');
         topicContainer.removeAttribute('required');
 
         let roomSeqNumber = 1;
