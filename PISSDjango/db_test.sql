@@ -1,4 +1,4 @@
-INSERT INTO App_lecturetype (type)
+INSERT OR IGNORE INTO App_lecturetype (type)
 VALUES
 ('Lecture'),
 ('Seminar'),
@@ -25,7 +25,7 @@ VALUES
 (4, 146, 325, 100),
 (1, 146, 1, 70);
 
-INSERT INTO App_subjectgroup (name)
+INSERT or Ignore INTO App_subjectgroup (name)
 VALUES
 ('MATH'),
 ('APPLIED_MATH'),
@@ -45,7 +45,7 @@ VALUES
 (5, 2.5, 'Увод в програмирането - практикум', 2, 0, 0),
 (6, 2.5, 'Философия на математиката', 0, 0, 2);
 
-INSERT INTO App_user (email, is_profile_disabled, password, priority, username)
+INSERT or IGNORE into App_user (email, is_profile_disabled, password, priority, username)
 VALUES
 ('boris_georgiev1998@gmail.com', 0, 'starwarsisC00L', 2, 'bobygeorg'),
 ('gergana_ivanova@gmail.com', 1, 'GeriIvanova22', 1, 'geryivanova'),
@@ -61,7 +61,7 @@ VALUES
 ('stanimir_gospodinov@gmail.com', 0, 'StaniGospodinov1', 2, 'stanimir'),
 ('anita_peneva@gmail.com', 0, 'AnitaPeneva90', 2, 'anitapeneva');
 
-INSERT INTO App_student (user_ptr_id, faculty_num)
+INSERT or IGNORE INTO App_student (user_id, faculty_num)
 VALUES
 (4, '1MI0600044'),
 (5, '9MI0700010'),
@@ -86,7 +86,7 @@ VALUES
 (1, 2,'2025-02-13', '12:00:00', '14:00:00', 'Обединение на множества'),
 (12, 8, '2025-02-14', '10:00:00', '12:00:00', 'Смисълът на математиката');
 
-INSERT INTO App_lessonevent (roomevent_ptr_id, lecture_type_id, subject_id)
+INSERT or IGNORE INTO App_lessonevent (roomevent_ptr_id, lecture_type_id, subject_id)
 VALUES
 (1, 1, 5),
 (2, 4, 2),
