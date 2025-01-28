@@ -38,9 +38,9 @@
                 <section>
                     <label for="isComputer">Изберете вида на стаята</label>
                     <select id="isComputer" name="isComputer" required>
-                        <option value="" disabled selected>Изберете вида на стаята</option>
+                        <option value="0" selected>Dont care</option>
                         <option value="1">Компютърна</option>
-                        <option value="0">Обикновена</option>
+                        <option value="2">Обикновена</option>
                     </select>
                 </section>
 
@@ -65,7 +65,7 @@
 
                 <section>
                     <label for="capacity">Нужен минимален капацитет:</label>
-                    <input type="number" id="capacity" name="capacity" required>
+                    <input type="number" id="capacity" name="capacity" min="0" max="300" value="25" required>
                 </section>
 
                 <button type="submit">Потърси стая</button>
@@ -73,6 +73,7 @@
         </section>
         <section id="roomSelectionForm"></section>
     </main>
+    <script src="../js/helper/past_date_check.js"></script>
     <script src="../js/room_search-script.js"></script>
 </body>
 </html>
