@@ -3,10 +3,8 @@ from app.models import Room, RoomEvent
 from datetime import datetime
 import json
 from django.views.decorators.csrf import csrf_exempt
-from jwt import decode as jwt_decode, exceptions
-import logging
+from app.views.tokens import decode_token
 
-logger = logging.getLogger(__name__)
 
 def filter_rooms(available_rooms, room_type, must_have_white_board, must_have_black_board, must_have_interactive_board, must_have_media):
     """With all available rooms, filter them by characteristics (!NB!) - this cannot be done in the DB, since we use BITS"""
@@ -37,20 +35,20 @@ def filter_rooms(available_rooms, room_type, must_have_white_board, must_have_bl
 def get_rooms(request):
     if request.method == 'POST':
         try:
-            logger.info("Request to get rooms.%s", request.body)
             data = json.loads(request.body)
         except json.JSONDecodeError:
             return JsonResponse({"success": False, "message": "Invalid JSON format."}, status=400)
-        # maybe sent the token here to extract the role and not sent it otherwise?
+        
         # if no token, you are student
-        role = 1  # Default to student
+        role = 1 
         
         token = data.get('token')
         if token:
             try:
-                decoded_token = jwt_decode(token, options={"verify_signature": False})
+                decoded_token = decode_token(token)
                 role = decoded_token.get('role', 1)  # Extract role, default to 1
-            except exceptions.DecodeError:
+                print(role)
+            except Exception:
                 print("Invalid token provided.")# Role: 1 (Student) or 2 (Teacher)
         
         date = data.get('date')  # Format: 'YYYY-MM-DD'
@@ -68,7 +66,6 @@ def get_rooms(request):
             start_time_obj = datetime.strptime(start_time.strip(), '%H:%M').time()
             end_time_obj = datetime.strptime(end_time.strip(), '%H:%M').time()
         except ValueError as e:
-            logger.error(f"Date/Time parsing error: {e}")
             return JsonResponse({"success": False, "message": "Invalid date or time format."}, status=400)
         # Find the overlapping roomEvents
 

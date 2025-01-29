@@ -6,7 +6,7 @@ class UserAdmin(admin.ModelAdmin):
 
 @admin.register(Floor)
 class FloorAdmin(admin.ModelAdmin):
-    list_disaply = ('id', 'number')
+    list_display = ('id', 'number')
 """
 @admin.register(RoomEventReview)
 class RoomEventReviewAdmin(admin.ModelAdmin):
