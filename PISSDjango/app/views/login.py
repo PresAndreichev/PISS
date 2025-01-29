@@ -13,7 +13,7 @@ def login_view(request):
             #check password 
             password = data.get("password")
             username = data.get("username")
-            
+            print(password, username)
             # Validate input
             if not username or not password:
                 return JsonResponse({"success": False, "message": "Username and password are required"}, status=400)
@@ -24,12 +24,10 @@ def login_view(request):
             except User.DoesNotExist:
                 return JsonResponse({"success": False, "message": "Invalid credentials"}, status=401)
                    
-            
             if not check_password(password, user.password):
                 return JsonResponse({"success": False, "message": "Invalid credentials"}, status=401)
 
             token = generate_token(user.id, user.username, user.priority) 
-            # maybe change the url as well - generate homepage info based on this
             return JsonResponse({"success": True, "message": "Login successful", "token": token, "role": user.priority})
 
         except Exception as e:

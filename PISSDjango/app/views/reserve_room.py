@@ -5,8 +5,6 @@ from app.views.tokens import decode_token
 from datetime import datetime
 import json
 
-reserved_rooms = []
-
 @csrf_exempt
 def reserve_room(request):
     if request.method == 'POST':
@@ -21,6 +19,7 @@ def reserve_room(request):
         start_time = data.get('startTime')
         end_time = data.get('endTime')
         topic = data.get('topic')
+        print(token, room_id, date, start_time, end_time, topic);
 
         if not all([token, room_id, date, start_time, end_time, topic]):
             return JsonResponse({"success": False, "message": "Missing required fields."}, status=400)

@@ -79,7 +79,7 @@ function generateRoomRequestBody(token) {
     };
 
     if (token !== null) { // Add the token to the query if the person has a valid one
-        Object.defineProperty(data, "token", token);
+        data.token = token;
     }
     return data;
 }
@@ -154,6 +154,10 @@ function buildReserveRoomButton() {
         const token = localStorage.getItem('authToken');
         const unessentialData = generateRoomRequestBody(token);
         const topic = document.getElementById('sessionTopic').value;
+        if (topic === "") {
+            alert("No text added into the topic!");
+            return;
+        }
 
         const data = JSON.stringify({ room_id: room_id, date: unessentialData.date, startTime: unessentialData.startTime, 
             endTime: unessentialData.endTime, token: token, topic: topic });
@@ -167,11 +171,13 @@ function buildReserveRoomButton() {
             body: data
         });
 
+        
         if (response.status === 200) {
             alert('Успешно резервирахте стаята!');
             window.location.href = '/static/html/index.html';
         } else {
             alert('Неуспешно резервиране на стаята!');
+            // REFACTOR THE HTMLs here! - maybe sent another request for rooms available then
             window.location.href = '/static/html/get_rooms.html';
         }
     });
@@ -190,9 +196,6 @@ function buildSingleRoomNode(room, roomNumberForPrinting, token) {
     roomElement.appendChild(roomDescription);
 
     if (token != null) {
-        //topicContainer.removeAttribute('hidden');
-        topicContainer.style.display = 'flex';
-        topicContainer.setAttribute('required', "true");
         const reserveButton = buildReserveRoomButton();
         roomElement.appendChild(reserveButton);
     }
