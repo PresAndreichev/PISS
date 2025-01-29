@@ -11,16 +11,16 @@ document.getElementById('login-form').addEventListener('submit', async function 
 
     if (isValid) {
         let isRegistered = await validateRegistration(username, password);
-        
+
         if (isRegistered) {
             const role = sessionStorage.getItem('role');
             if (role == "1" || role == "2") {
                 window.location.href = '/static/html/index.html';
             }
         }
+    } else {
+        alert("Невалидни входни данни!");
     }
-    alert("Невалидни входни данни!");
-    //window.location.href = '/static/html/login.html';
 });
 
 function validateCredentials(username, password) {
