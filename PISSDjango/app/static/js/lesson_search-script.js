@@ -102,9 +102,9 @@ function generateRoomRequestBody() {
         "lessonType": type,
     };
 
-    const lessonName = document.getElementById('lesson-name').value;
-    if (lessonName !== "") { // If a concrete subject has been selected, add it to the query (if not we will return all subjects)
-        data.lessonName = lessonName;
+    const lessonId = document.getElementById('lesson-name').value;
+    if (lessonId !== "") { // If a concrete subject has been selected, add it to the query (if not we will return all subjects)
+        data.lessonId = Number(lessonId);
     }
 
     const token = localStorage.getItem('authToken');
@@ -211,17 +211,16 @@ document.addEventListener('DOMContentLoaded', async function () {
     document.getElementById('LessonSearchForm').addEventListener('submit', async function (event) {
         event.preventDefault();
         const responseData = await sendLessonsQuery();
-        
+        console.log(responseData.lessons.length);
         const lessonsContainer = document.getElementById('LessonDetailsForm');
         lessonsContainer.innerHTML = ''; // reset the container after previous query
         lessonsContainer.setAttribute("hidden", true);
         
-        if (responseData.lessons.length > 0) {
-            lessonsContainer.removeAttribute("hidden");
+        if (responseData.lessons.length === 0) {
             alert("Няма уроци спрямо зададените критерии!");
             return;
         }
-        
+        lessonsContainer.removeAttribute("hidden");
         let lessonSeqNumber = 1;
         responseData.lessons.forEach(lesson => {
             const lessonElement = generateLessonElement(lesson, lessonSeqNumber);
