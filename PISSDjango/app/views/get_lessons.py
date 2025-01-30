@@ -25,9 +25,9 @@ def get_lessons(request):
             # Incrementally build a query but don't execute it yet
             query = Q(date__range=[start_date.date(), end_date.date()])
 
-            lesson_name = data.get("lessonName", "").strip()
-            if lesson_name:  # if a concrete lessons are provided, return only them!
-                query &= Q(subject__name__icontains=lesson_name)
+            lesson_id = data.get("lessonId")  # Get lesson ID from request
+            if lesson_id:  
+                query &= Q(id=lesson_id)
 
             lesson_type = data.get("lessonType", "").strip()
             if lesson_type and lesson_type != "All":
