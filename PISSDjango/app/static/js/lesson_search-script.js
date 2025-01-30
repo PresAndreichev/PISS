@@ -1,4 +1,30 @@
-﻿function disallowPastDates() {
+﻿async function generateSubjectsList() {
+    const subjectsList = await (await fetch('/api/list_subjects/', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        }
+    })).json();
+
+    const shadowDOMNode = document.createDocumentFragment();
+    const firstEmptyChild =  document.createElement("option");
+    shadowDOMNode.appendChild(firstEmptyChild);
+
+    subjectsList.subjects.forEach(subject => {
+        shadowDOMNode.appendChild(generateSubjectOption(subject));
+    })
+    document.getElementById("lesson-name").appendChild(shadowDOMNode);
+}
+
+function generateSubjectOption(subject) {
+    const optionNode = document.createElement("option");
+    optionNode.textContent = subject.subjectName;
+    optionNode.value = subject.subjectId;
+    return optionNode;
+}
+
+function disallowPastDates() {
     const currDate = new Date().toISOString().split('T')[0];
     document.getElementById("startDate").setAttribute('min', currDate);
     document.getElementById("endDate").setAttribute('min', currDate);
@@ -178,6 +204,7 @@ function generateLessonElement(lesson, lessonSeqNumber) {
 }
 
 document.addEventListener('DOMContentLoaded', async function () {
+    await generateSubjectsList();
     generateBackMenuButton();
     disallowPastDates();
 
