@@ -80,6 +80,12 @@ function generateRoomRequestBody() {
     if (lessonName !== "") { // If a concrete subject has been selected, add it to the query (if not we will return all subjects)
         data.lessonName = lessonName;
     }
+
+    const token = localStorage.getItem('authToken');
+    if (token !== null) { // Add the token to the query if the person has a valid one
+        data.token = token;
+    }
+    
     return data;
 }
 
