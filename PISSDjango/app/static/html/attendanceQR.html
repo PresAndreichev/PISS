@@ -1,23 +1,38 @@
 <!DOCTYPE html>
-<html lang="bg">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Присъствие</title>
-        <link rel="stylesheet" href="../css/attendanceQR.css">
-        <link rel="icon" href="../img/logo.jpg" type="image/png">
-    </head>
-    <body>
-        <header>
-            <h1>FMI Room Scheduler</h1>
-            <h2>Сканирай QR кода и отбележи на присъствието си</h2>
-            <a href="index.html" class="button"> Към главното меню </a>
-        </header>
-        <main>
-            <section id="attendanceQR">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Scanner</title>
+    <style>
+        #video {
+            width: 50%;
+            height: auto;
+        }
+        #back-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        #back-button:hover {
+            background-color: #45a049;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
+    <script src="../js/attendanceQR-script.js" defer></script>
+</head>
+<body>
+    <h1>QR Code Scanner</h1>
+    <video id="video" autoplay></video>
+    <button id="back-button" onclick="goBack()">Go Back</button>
 
-            </section>
-        </main>
-        <script src="../js/attendanceQR-script.js"></script>
-    </body>
+    <div id="user-list">
+        <h2>Attendees:</h2>
+        <ul id="usernames"></ul>
+    </div>
+</body>
 </html>
