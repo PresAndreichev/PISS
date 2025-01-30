@@ -15,17 +15,18 @@ def get_lessons(request):
             lesson_name = data.get("lessonName", "").strip()
             lesson_type = data.get("lessonType", "").strip()
             
-            if not start_date or not end_date:
-                return JsonResponse({"error": "Invalid start or end date"}, status=400)
+            if not start_date or not end_date or not lesson_name or not lesson_type:
+                return JsonResponse({"error": "Not a valid data"}, status=400)
             
-            lessons = LessonEvent.objects.filter(date__range=[start_date.date(), end_date.date()])
-            
-            if lesson_name:
-                lessons = lessons.filter(subject__name__icontains=lesson_name)
-            
-            if lesson_type:
-                lessons = lessons.filter(lecture_type__type__iexact=lesson_type)
-            
+            if lesson_type == "all":
+                lessons = LessonEvent.objects.filter(subject__name__icontains=lesson_name, 
+                                                    date__range=[start_date.date(), end_date.date()])
+            else:
+                lessons = LessonEvent.objects.filter(subject__name__icontains=lesson_name,
+                                                    lecture_type__type__iexact=lesson_type, 
+                                                    date__range=[start_date.date(), end_date.date()])
+                
+            lessons = sorted(lessons, key=lambda x: (x.date, x.start_time, x.end_time, x.room.id))
             lessons_data = [
                 {
                     "id": lesson.id,

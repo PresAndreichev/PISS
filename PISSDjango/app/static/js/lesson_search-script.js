@@ -10,8 +10,8 @@
         event.preventDefault();
 
         const lessonName = document.getElementById('lesson-name').value;
-        const startDate = new Date(document.getElementById('startDate').value);
-        const endDate = new Date(document.getElementById('endDate').value);
+        const startDate = new Date(document.getElementById('startDate').value).toISOString().split('T')[0];
+        const endDate = new Date(document.getElementById('endDate').value).toISOString().split('T')[0];
         const type = document.getElementById('lecture-type').value; //lecture, practical, theoretical, all
 
         if (startDate >= endDate) {
@@ -24,7 +24,7 @@
             lessonName: lessonName, lessonType: type
         });
 
-        const response = await fetch('/api/get_lesson', {
+        const response = await fetch('/api/get_lessons/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -38,21 +38,22 @@
         const container = document.getElementById('LessonDetailsForm');
 
         const radioGroupName = 'lessonSelection';
-
+        
         let lessonSeqNumber = 1;
 
         response_data.lessons.forEach(lesson => {
-            const lessonElement = document.createElement('section');
+            let lessonElement = document.createElement('section');
 
             lessonType = lesson.lectureType;
-            type;
-            if (lessonType == "lecture") {
+            console.log(lessonType);
+            let type;
+            if (lessonType == "Lecture") {
                 type = "Лекция";
-            }  else if (lessonType == "practical"){
+            }  else if (lessonType == "Practicum"){
                 type = "Практикум";
-            } else if (lessonType == "theoretical"){
+            } else if (lessonType == "Seminar"){
                 type = "Семинар";
-            } else if (lessonType == "guest-lecture"){
+            } else if (lessonType == "GuestLecture"){
                 type = "Гост лекция";
             }
 
@@ -67,7 +68,7 @@
             <p>Краен час - ${lesson.endTime}</p>
             <p>Вид занятие - ${type}</p>
             `;
-
+            lessonElement.setAttribute("data-id", lesson.id);
             container.appendChild(lessonElement);
             lessonSeqNumber++;
         });
@@ -111,7 +112,7 @@
                 dateAttendanceChecked: dateSaved,
             });
 
-            const response = await fetch('/api/take_attendance', { //May need to redart the PATH 
+            const response = await fetch('/api/take_attendance/', { //May need to redart the PATH 
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
