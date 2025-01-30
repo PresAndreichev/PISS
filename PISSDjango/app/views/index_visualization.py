@@ -25,7 +25,8 @@ def index_visualization(request):
 
         lesson_events = LessonEvent.objects.filter(attendees=user_id) | LessonEvent.objects.filter(host=user_id)
 
-        # Extract related room data
+        lesson_events = lesson_events.order_by("date", "start_time")
+
         rooms = Room.objects.filter(events__in=lesson_events).distinct()
 
         # Serialize Lesson Events
@@ -39,11 +40,11 @@ def index_visualization(request):
                 "endTime": lesson.end_time.strftime("%H:%M"),
                 "lectureType": lesson.lecture_type.type,
                 "hostId": lesson.host.id if lesson.host else None,
+                "hostName": lesson.host.full_name if lesson.host else "Unknown",
             }
             for lesson in lesson_events
         ]
 
-        # Serialize Room Data
         rooms_data = [
             {
                 "id": room.id,
