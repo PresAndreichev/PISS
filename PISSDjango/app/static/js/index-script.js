@@ -2,7 +2,7 @@
 
     greet();
 
-
+    
 });
 
 function greet() {

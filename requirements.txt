@@ -7,3 +7,4 @@ pycparser==2.22
 pygraphviz==1.14
 PyJWT==2.10.1
 sqlparse==0.5.3
+opencv-python==4.5.3.56
