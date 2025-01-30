@@ -184,12 +184,21 @@ document.addEventListener('DOMContentLoaded', async function () {
     document.getElementById('LessonSearchForm').addEventListener('submit', async function (event) {
         event.preventDefault();
         const responseData = await sendLessonsQuery();
-        const container = document.getElementById('LessonDetailsForm');
+        
+        const lessonsContainer = document.getElementById('LessonDetailsForm');
+        lessonsContainer.innerHTML = ''; // reset the container after previous query
+        lessonsContainer.setAttribute("hidden", true);
+        
+        if (responseData.lessons.length > 0) {
+            lessonsContainer.removeAttribute("hidden");
+            alert("Няма уроци спрямо зададените критерии!");
+            return;
+        }
         
         let lessonSeqNumber = 1;
         responseData.lessons.forEach(lesson => {
             const lessonElement = generateLessonElement(lesson, lessonSeqNumber);
-            container.appendChild(lessonElement);
+            lessonsContainer.appendChild(lessonElement);
             lessonSeqNumber++;
         });
     });
