@@ -21,7 +21,7 @@ sudo apt install python3-dev -y
 sudo apt install graphviz -y
 sudo apt install libgraphviz-dev pkg-config -y
 sudo apt install graphviz-dev -y
-
+sudo apt install sqlite3 -y
 # Create the virtual environment if one doesn't already exist
 if [ ! -d './venv' ]; then
     python3 -m venv ./venv
