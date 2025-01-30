@@ -115,3 +115,21 @@ a {
     a:hover {
         background-color: #2980b9;
     }
+
+.lesson-container {
+    display: flex;
+    align-items: left;
+    justify-content: center;
+    flex-direction: row;
+}
+
+.lesson-container header {
+    padding-top: 0.2em;
+    margin-top: 0.2em;
+    text-align: center;
+}
+
+.lesson-container button {
+    max-width: 30%;
+    max-height: 30%;
+}

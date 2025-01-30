@@ -83,122 +83,108 @@ function generateRoomRequestBody() {
     return data;
 }
 
+async function sendLessonsQuery() {
+    const data = generateRoomRequestBody();
+    const response = await fetch('/api/get_lessons/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify(data)
+    });
+    return await response.json();
+}
+
+function getLessonTypeBasedOnReturnedJSON(lessonTypeFromJSON) {
+    const lessonParser = {
+        "Lecture": "Лекция",
+        "Practicum": "Практикум",
+        "Seminar": "Семинар",
+        "GuestLecture": "Гост-лекция"
+    };
+
+    return lessonParser[lessonTypeFromJSON];
+}
+
+function generateLessonDescription(lesson, lessonSeqNumber) {
+    const type = getLessonTypeBasedOnReturnedJSON(lesson.lectureType)
+    const lessonDescription = document.createElement("article");
+    lessonDescription.innerHTML = `
+    <header>
+        <h3>${lessonSeqNumber}. ${lesson.lessonName}</h3>
+        <h4>Стая/Зала: ${lesson.roomNumber}</h4>
+    </header>
+    <p>Ден - ${lesson.date}</p>
+    <p>Начален час - ${lesson.startTime}</p>
+    <p>Краен час - ${lesson.endTime}</p>
+    <p>Вид занятие - ${type}</p>
+    `;
+    return lessonDescription;
+}
+
+function generateLessonAttendButton(lesson) {
+    const reserveButton = document.createElement('button');
+    reserveButton.textContent = 'Присъствай!';
+    reserveButton.style.flexGrow = 1
+
+    reserveButton.addEventListener('click', async function (event) {
+        const room_id = event.target.parentElement.getAttribute("data-id");
+        // we MUST extract the values FROM INSIDE this lambda function, otherwise context is lost when invoking event!
+        const token = localStorage.getItem('authToken');
+
+        const data = JSON.stringify({room_id: room_id, token: token});
+
+        const response = await fetch('/api/take_attendance/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: data
+        });
+        
+        if (response.status === 200) {
+            alert('Успешно се записахте за събитието');
+            window.location.href = '/static/html/index.html';
+        } else {
+            // He has already registered or the capacity of the room has been fulfilled!
+            alert('Не успяхте да се запишете за урока - вече сте записан или местата са свършили ;(');
+            // REFACTOR THE HTMLs here! - sent another request to fetch data
+            window.location.href = '/static/html/lesson_search.html';
+        }
+    });
+
+    return reserveButton;
+}
+
+function generateLessonElement(lesson, lessonSeqNumber) {
+    const lessonElement = document.createElement('section');
+    lessonElement.setAttribute("data-id", lesson.id);
+    lessonElement.classList.add("lesson-container");
+
+    const lessonDescription = generateLessonDescription(lesson, lessonSeqNumber);
+    lessonElement.appendChild(lessonDescription);
+    
+    const attendButton = generateLessonAttendButton(lesson);
+    lessonElement.appendChild(attendButton);
+    return lessonElement;
+}
+
 document.addEventListener('DOMContentLoaded', async function () {
     generateBackMenuButton();
     disallowPastDates();
 
     document.getElementById('LessonSearchForm').addEventListener('submit', async function (event) {
         event.preventDefault();
-        const data = generateRoomRequestBody();
-
-        const response = await fetch('/api/get_lessons/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-            body: JSON.stringify(data)
-        });
-
-        const response_data = await response.json();
-
+        const responseData = await sendLessonsQuery();
         const container = document.getElementById('LessonDetailsForm');
-
-        const radioGroupName = 'lessonSelection';
         
         let lessonSeqNumber = 1;
-
-        response_data.lessons.forEach(lesson => {
-            let lessonElement = document.createElement('section');
-
-            lessonType = lesson.lectureType;
-            console.log(lessonType);
-            let type;
-            if (lessonType == "Lecture") {
-                type = "Лекция";
-            }  else if (lessonType == "Practicum"){
-                type = "Практикум";
-            } else if (lessonType == "Seminar"){
-                type = "Семинар";
-            } else if (lessonType == "GuestLecture"){
-                type = "Гост лекция";
-            }
-
-            lessonElement.innerHTML = `
-            <label>
-                <input type="radio" name="${radioGroupName}" value="${lessonSeqNumber}">
-                <strong>${lessonSeqNumber}. ${lesson.lessonName}</strong>
-                <strong>Стая/Зала: ${lesson.roomNumber}</strong>
-            </label>
-            <p>Ден - ${lesson.date}</p>
-            <p>Начален час - ${lesson.startTime}</p>
-            <p>Краен час - ${lesson.endTime}</p>
-            <p>Вид занятие - ${type}</p>
-            `;
-            lessonElement.setAttribute("data-id", lesson.id);
+        responseData.lessons.forEach(lesson => {
+            const lessonElement = generateLessonElement(lesson, lessonSeqNumber);
             container.appendChild(lessonElement);
             lessonSeqNumber++;
         });
-
-        const containerSubmit = document.createElement('p');
-        containerSubmit.innerHTML = `
-        <button type="submit" class= "fixed-footer">Отбележи присъствие</button>
-        `;
-        container.appendChild(containerSubmit);
-
-        attended_lesson = document.getElementById('lessonSelectionForm');
-
-        attended_lesson.addEventListener('submit', async function () {
-
-            const selectedLesson = document.querySelector('input[name="lessonSelection"]:checked');
-
-            if (!selectedLesson) {
-                alert('Моля, изберете урок преди да запазите!');
-                return;
-            }
-
-            const lessonSeqNumber = selectedLesson.value;
-
-            const selectedLessonDetails = response_data.lessons[lessonSeqNumber - 1];  
-
-            if (!selectedLessonDetails) {
-                alert('Грешка при извличане на информация за избраната стая!');
-                return;
-            }
-
-            const dateSaved = date_time_now();
-
-            const lessonDataJSON = JSON.stringify({
-                username: current_user,
-                lessonName: selectedLessonDetails.name,
-                date: selectedLessonDetails.date,
-                startTime: selectedLessonDetails.startTime,
-                endTime: selectedLessonDetails.endTime,
-                lectureType: selectedLessonDetails.lectureType,
-                dateAttendanceChecked: dateSaved,
-            });
-
-            const response = await fetch('/api/take_attendance/', { //May need to redart the PATH 
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                },
-                body: lessonDataJSON
-            });
-
-            final_response = await response.json();
-
-            if (final_response.success) {
-                alert('Успешно отчетено присъствие!');
-
-                window.location.href = '/static/html/lesson_search.html';
-
-            } else {
-                alert('Възникна грешка! Присъствието не беше отчетено!');
-            }
-
-        });
     });
 });
-
