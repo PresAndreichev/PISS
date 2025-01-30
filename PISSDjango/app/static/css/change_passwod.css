@@ -1,0 +1,111 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start; 
+    min-height: 100vh;
+    color: #333;
+}
+header {
+    text-align: center;
+    margin-top: 80px;
+    margin-bottom: 20px;
+}
+.fixed-footer {
+    position: fixed;
+    bottom:0;
+    width:50%;
+    text-align: center;
+    padding: 10px 0; 
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2); 
+    z-index: 1000; 
+}
+    .fixed-footer button {
+        padding: 10px 20px;
+        font-size: 16px;
+        background-color: #3498db;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+        .fixed-footer button:hover {
+            background-color: #2980b9;
+        }
+main {
+    padding: 20px;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 800px;
+    display: flex;
+    flex-direction: column; 
+}
+h1 {
+    font-size: 2em;
+    margin: 0.67em 0;
+    color: #2c3e50;
+}
+h3 {
+    font-size: 1em;
+    margin: 0.67em 0;
+    color: #2c3e50;
+}
+form {
+    display: flex;
+    flex-direction: column;
+}
+section {
+    border: 2px solid #2980b9;
+    border-radius: 15px;
+    padding: 10px;
+}
+button {
+    width: auto;
+    height: auto;
+    font-size: 1.2em;
+    color: #fff;
+    background-color: #3498db;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 10px;
+    margin-top: 10px;
+}
+    button:hover {
+        background-color: #2980b9;
+    }
+a {
+    width: 50%; 
+    height: 50%; 
+    text-decoration: none;
+    font-size: 1.2em;
+    color: #fff;
+    background-color: #3498db;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    display: inline;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 10px;
+}
+    a:hover {
+        background-color: #2980b9;
+    }
+#roomSelectionForm {
+    display: none;
+    justify-content: center;
+    flex-direction: column;
+}
+#roomSelectionForm>h2,#roomSelectionForm>input {
+    text-align: center;
+}
