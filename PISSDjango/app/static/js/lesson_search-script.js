@@ -188,10 +188,11 @@ document.addEventListener('DOMContentLoaded', async function () {
         const lessonsContainer = document.getElementById('LessonDetailsForm');
         lessonsContainer.innerHTML = ''; // reset the container after previous query
         lessonsContainer.setAttribute("hidden", true);
-        console.log(responseData);
-        console.log(responseData.lessons.length);
+        
         if (responseData.lessons.length > 0) {
             lessonsContainer.removeAttribute("hidden");
+            alert("Няма уроци спрямо зададените критерии!");
+            return;
         }
         
         let lessonSeqNumber = 1;
