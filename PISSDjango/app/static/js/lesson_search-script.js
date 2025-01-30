@@ -1,28 +1,95 @@
-﻿document.addEventListener('DOMContentLoaded', async function () {
+﻿function disallowPastDates() {
+    const currDate = new Date().toISOString().split('T')[0];
+    document.getElementById("startDate").setAttribute('min', currDate);
+    document.getElementById("endDate").setAttribute('min', currDate);
+}
 
-    const current_user = sessionStorage['username'];
-    const userRole = sessionStorage['role'];
-
-    lesson_filters = document.getElementById('LessonSearchForm');
-
-    lesson_filters.addEventListener('submit', async function () {
-
-        event.preventDefault();
-
-        const lessonName = document.getElementById('lesson-name').value;
-        const startDate = new Date(document.getElementById('startDate').value).toISOString().split('T')[0];
-        const endDate = new Date(document.getElementById('endDate').value).toISOString().split('T')[0];
-        const type = document.getElementById('lecture-type').value; //lecture, practical, theoretical, all
-
-        if (startDate >= endDate) {
-            alert('Началната дата трябва да бъде преди крайната!');
-            return;
+function getCurrentUser(token) {
+    if (token !== null) {
+        try {
+            const decoded = jwt_decode(token);
+            const username = decoded.username || decoded.user_id; 
+            return username;
+        } catch (e) {
+            return undefined;
         }
+    }
+    return undefined;
+}
 
-        const data = JSON.stringify({
-            username: current_user, role: userRole, startDate: startDate, endDate: endDate,
-            lessonName: lessonName, lessonType: type
-        });
+function generateBackMenuButton() {
+    const token = localStorage.getItem('authToken');
+    const current_user = getCurrentUser(token);
+
+    const referedPage = current_user === undefined ? 'начално' : 'главно';
+    const referedPageSite = current_user === undefined ? "/static/html/main.html" : "/static/html/index.html";
+    const headerText = "Обратно към " + referedPage + " меню";
+    const headerButton = document.querySelector('header > a');
+    headerButton.textContent = headerText
+    headerButton.setAttribute("href", referedPageSite);
+}
+
+function getTodayUNIXTime() {
+    let todayUnixTime = new Date();
+    todayUnixTime.setUTCHours(0, 0, 0, 0);
+    return todayUnixTime.getTime();
+}
+
+function getParsedStartDate(todayUnixTime) {
+    const enteredStartDate = document.getElementById('startDate').value;
+    let startDate = enteredStartDate === "" ? new Date(todayUnixTime) : new Date(enteredStartDate);
+    
+    if (startDate.getTime() < todayUnixTime) {
+        startDate = new Date(todayUnixTime);
+    }
+    return startDate;
+}
+
+function getParsedEndDate(todayUnixTime, startDate) {
+    const defaultEndDate = new Date(todayUnixTime);
+    const DEFAULT_MAX_INTERVAL_MONTHS = 1;
+    defaultEndDate.setMonth(defaultEndDate.getMonth() + DEFAULT_MAX_INTERVAL_MONTHS) // JS automatically does the % length
+
+    const enteredEndDate = document.getElementById('endDate').value;
+    let endDate = enteredEndDate === "" ? new Date(defaultEndDate.getTime()) : new Date(enteredEndDate);
+    if (endDate.getTime() < startDate.getTime()) {
+        endDate = new Date(defaultEndDate.getTime());
+    }
+    return endDate;
+}
+
+function formatDate(date) {
+    return date.toISOString().split('T')[0];
+}
+
+function generateRoomRequestBody() {
+    const todayUnixTime = getTodayUNIXTime();
+    const startDateObj = getParsedStartDate(todayUnixTime); // startDate.toISOString().split('T')[0];
+    const startDate = formatDate(startDateObj);
+    const endDate = formatDate(getParsedEndDate(todayUnixTime, startDateObj));
+
+    const type = document.getElementById('lecture-type').value; //lecture, practical, theoretical, all, guest-lecture
+
+    let data = { 
+        "startDate": startDate,
+        "endDate": endDate,
+        "lessonType": type,
+    };
+
+    const lessonName = document.getElementById('lesson-name').value;
+    if (lessonName !== "") { // If a concrete subject has been selected, add it to the query (if not we will return all subjects)
+        data.lessonName = lessonName;
+    }
+    return data;
+}
+
+document.addEventListener('DOMContentLoaded', async function () {
+    generateBackMenuButton();
+    disallowPastDates();
+
+    document.getElementById('LessonSearchForm').addEventListener('submit', async function (event) {
+        event.preventDefault();
+        const data = generateRoomRequestBody();
 
         const response = await fetch('/api/get_lessons/', {
             method: 'POST',
@@ -30,7 +97,7 @@
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
             },
-            body: data
+            body: JSON.stringify(data)
         });
 
         const response_data = await response.json();
@@ -103,7 +170,6 @@
 
             const lessonDataJSON = JSON.stringify({
                 username: current_user,
-                role: userRole,
                 lessonName: selectedLessonDetails.name,
                 date: selectedLessonDetails.date,
                 startTime: selectedLessonDetails.startTime,

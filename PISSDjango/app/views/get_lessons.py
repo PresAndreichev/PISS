@@ -1,32 +1,41 @@
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.dateparse import parse_datetime
-from django.contrib.auth.decorators import login_required
+from django.db.models import Q  # to use query set for more optimised querying!
+#from django.contrib.auth.decorators import login_required
 import json
-from ..models import LessonEvent, LectureType
+from app.models import LessonEvent, LectureType
 
 @csrf_exempt
 def get_lessons(request):
-    if request.method == "POST":
-        try:
+    if request.method != "POST":
+        return JsonResponse({"error": "Invalid request method"}, status=405)
+
+    try:
             data = json.loads(request.body)
             start_date = parse_datetime(data.get("startDate"))
             end_date = parse_datetime(data.get("endDate"))
+            
+            
+            if not start_date or not end_date:
+                return JsonResponse({"error": "No data range provided!"}, status=400)
+            
+            # Incrementally build a query but don't execute it yet
+            query = Q(date__range=[start_date.date(), end_date.date()])
+            print(start_date, end_date)
+
             lesson_name = data.get("lessonName", "").strip()
+            print(lesson_name)
+            if lesson_name:  # if a concrete lessons are provided, return only them!
+                query &= Q(subject__name__icontains=lesson_name)
+
             lesson_type = data.get("lessonType", "").strip()
-            
-            if not start_date or not end_date or not lesson_name or not lesson_type:
-                return JsonResponse({"error": "Not a valid data"}, status=400)
-            
-            if lesson_type == "all":
-                lessons = LessonEvent.objects.filter(subject__name__icontains=lesson_name, 
-                                                    date__range=[start_date.date(), end_date.date()])
-            else:
-                lessons = LessonEvent.objects.filter(subject__name__icontains=lesson_name,
-                                                    lecture_type__type__iexact=lesson_type, 
-                                                    date__range=[start_date.date(), end_date.date()])
-                
-            lessons = sorted(lessons, key=lambda x: (x.date, x.start_time, x.end_time, x.room.id))
+            print(lesson_type)
+            if lesson_type and lesson_type != "All":
+                query &= Q(lecture_type__type__iexact=lesson_type)
+
+            # And finally now execute the completed query
+            lessons = LessonEvent.objects.filter(query).order_by("date", "start_time", "end_time", "room_id")
             lessons_data = [
                 {
                     "id": lesson.id,
@@ -41,7 +50,7 @@ def get_lessons(request):
             ]
             
             return JsonResponse({"lessons": lessons_data}, status=200)
-        except Exception as e:
-            return JsonResponse({"error": str(e)}, status=500)
+    except Exception as e:
+            return JsonResponse({"error": str(e)}, status=500)    
     
-    return JsonResponse({"error": "Invalid request method"}, status=405)
+    

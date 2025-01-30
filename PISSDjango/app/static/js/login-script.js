@@ -1,5 +1,4 @@
-﻿
-document.getElementById('login-form').addEventListener('submit', async function (event) {
+﻿document.getElementById('login-form').addEventListener('submit', async function (event) {
     event.preventDefault();
 
     sessionStorage.clear(); //for when user return to the screen from Излизане
