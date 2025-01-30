@@ -129,11 +129,11 @@ function generateLessonAttendButton(lesson) {
     reserveButton.style.flexGrow = 1
 
     reserveButton.addEventListener('click', async function (event) {
-        const room_id = event.target.parentElement.getAttribute("data-id");
+        const roomEventId = event.target.parentElement.getAttribute("data-id");
         // we MUST extract the values FROM INSIDE this lambda function, otherwise context is lost when invoking event!
         const token = localStorage.getItem('authToken');
 
-        const data = JSON.stringify({room_id: room_id, token: token});
+        const data = JSON.stringify({roomEventId: roomEventId, token: token});
 
         const response = await fetch('/api/take_attendance/', {
             method: 'POST',
