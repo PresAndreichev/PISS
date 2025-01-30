@@ -9,6 +9,7 @@ from .views.reserve_room import reserve_room
 from .views.get_lessons import get_lessons
 from .views.take_attendance import take_attendance
 from .views.list_subjects import list_subjects
+from .views.index_visualization import index_visualization
 
 urlpatterns = [
     path('api/login/', login_view, name='login'),                        # Login route
