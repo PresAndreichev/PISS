@@ -6,7 +6,7 @@ from .views.change_password import change_password
 from .views.serve_html import serve_html
 from .views.get_rooms import get_rooms
 from .views.reserve_room import reserve_room
-
+from .views.get_lessons import get_lessons
 #bsaa
 urlpatterns = [
     path('api/login/', login_view, name='login'),                        # Login route
@@ -15,6 +15,7 @@ urlpatterns = [
     path('api/register/', register_user, name='register_user'),
     path('', lambda request: serve_html(request, 'main'), name='main'),  # Homepage route
     path('api/get_rooms/', get_rooms, name='get_rooms'),
-    path('api/reserve_room/', reserve_room, name='reserve_room')
+    path('api/reserve_room/', reserve_room, name='reserve_room'),
+    path('api/get_lessons/', get_lessons, name='get_lesson')
 ]
 # Add the URLS, of the get_lesson, take_attendance, get_rooms, reserve_room, get_saved_rooms
