@@ -6,7 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 from ..models import LessonEvent
 from app.views.tokens import decode_token
-from app.views import User
+from ..models import User
 
 @csrf_exempt
 def take_attendance(request):
