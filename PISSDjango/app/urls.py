@@ -7,7 +7,7 @@ from .views.serve_html import serve_html
 from .views.get_rooms import get_rooms
 from .views.reserve_room import reserve_room
 
-
+#bsaa
 urlpatterns = [
     path('api/login/', login_view, name='login'),                        # Login route
     path('api/disable-profile/', disable_profile, name='disable_profile'),  # Disable profile route
