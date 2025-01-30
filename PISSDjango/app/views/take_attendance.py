@@ -4,7 +4,7 @@
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
-from ..models import LessonEvent
+from ..models import RoomEvent
 from app.views.tokens import decode_token
 from ..models import User
 
@@ -28,8 +28,8 @@ def take_attendance(request):
                 
         room_event_id = data.get('roomEventId')
         try:
-            lesson = LessonEvent.objects.get(id=room_event_id)
-        except LessonEvent.DoesNotExist:
+            event = RoomEvent.objects.get(id=room_event_id)
+        except RoomEvent.DoesNotExist:
             return JsonResponse({"success": False, "message": "Lesson not found."}, status=404)
         
         try:
@@ -37,11 +37,11 @@ def take_attendance(request):
         except User.DoesNotExist:
             return JsonResponse({"success": False, "message": "User not found."}, status=404)
         
-        if user_id in lesson.attendees.all():
+        if user_id in event.attendees.all():
             return JsonResponse({"success": False, "message": "User already in attendance."}, status=400)
         
-        lesson.attendees.add(user)
-        lesson.save()
+        event.attendees.add(user)
+        event.save()
         return JsonResponse({"success": True, "message": "User added to attendance."}, status=200)
         
     return JsonResponse({"success": False, "message": "Invalid request method."}, status=405)

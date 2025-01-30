@@ -10,6 +10,7 @@ from .views.get_lessons import get_lessons
 from .views.take_attendance import take_attendance
 from .views.list_subjects import list_subjects
 from .views.index_visualization import index_visualization
+from .views.get_meetings import get_meetings
 
 urlpatterns = [
     path('api/login/', login_view, name='login'),                        # Login route
@@ -22,6 +23,7 @@ urlpatterns = [
     path('api/get_lessons/', get_lessons, name='get_lesson'),
     path('api/take_attendance/', take_attendance, name='take_attendance'),
     path('api/list_subjects/', list_subjects, name='list_subjects'),
-    path('api/index_visualization/', index_visualization, name='index_visualization')
+    path('api/index_visualization/', index_visualization, name='index_visualization'),
+    path('api/get_meetings/', get_meetings, name='get_meetings')
 ]
 # Add the URLS, of the get_lesson, take_attendance, get_rooms, reserve_room, get_saved_rooms

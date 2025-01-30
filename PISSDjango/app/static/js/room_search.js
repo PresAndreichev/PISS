@@ -128,7 +128,7 @@ function buildRoomDescription(room, numberInResultSet) {
     const roomDescriptionNode = document.createElement('div');
     roomDescriptionNode.style.flexGrow = 1
     roomDescriptionNode.innerHTML = `
-        <strong> ${numberInResultSet}. Стая/Зала: ${room.roomNumber}</strong>
+        <strong>№${numberInResultSet}. Стая/Зала: ${room.roomNumber}</strong>
         <p>Вид стая - ${roomCharacteristics.isComputerRoom}</p>
         <p>Вид дъска:</p>
         <ul type='none'>

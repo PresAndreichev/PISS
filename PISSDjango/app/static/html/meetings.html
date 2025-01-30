@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="bg">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Разгледай срещи</title>
+        <link rel="stylesheet" href="../css/lesson_search.css">
+        <link rel="icon" href="../img/logo.jpg" type="image/png">
+    </head>
+    <body>
+        <header>
+            <h1>FMI Room Scheduler</h1>
+            <h2>Налични събития/срещи (неуроци)</h2>
+            <a class="button"></a>
+        </header>
+        <main>
+            <section id="LessonSearchForm">
+                <form id="lessonSelectionForm">
+    
+                    <section>
+                        <label for="startDatePicker">Начална дата:</label>
+                        <input type="date" id="startDate" name="startDate">
+                    </section>
+    
+                    <section>
+                        <label for="endDatePicker">Крайна дата:</label>
+                        <input type="date" id="endDate" name="endDate">
+                    </section>
+
+                    <section>
+                        <label for="room-number">Номер на стая:</label>
+                        <input id="room-number">
+                    </section>
+    <!--// event (nelesson), sys startTime, endTIme (ako ne sa podadeni, start e dnes) endDate sled 3 dni, (vajno - da ne izlizat eventi, za koito sum zapisan ili sum host), roomNumber - ako ne za vsqka
+//start_time, end_time, date, host_ID/or not, room_id/not-->
+                    <button type="submit">Разгледай събитията</button>
+                </form>
+            </section>
+            <section id="LessonDetailsForm" hidden></section>
+        </main>
+        <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
+        <script src="../js/meetings.js"></script>
+    </body>
+</html>

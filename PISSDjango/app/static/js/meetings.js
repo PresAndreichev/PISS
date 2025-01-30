@@ -1,30 +1,4 @@
-﻿async function generateSubjectsList() {
-    const subjectsList = await (await fetch('/api/list_subjects/', {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-        }
-    })).json();
-
-    const shadowDOMNode = document.createDocumentFragment();
-    const firstEmptyChild =  document.createElement("option");
-    shadowDOMNode.appendChild(firstEmptyChild);
-
-    subjectsList.subjects.forEach(subject => {
-        shadowDOMNode.appendChild(generateSubjectOption(subject));
-    })
-    document.getElementById("lesson-name").appendChild(shadowDOMNode);
-}
-
-function generateSubjectOption(subject) {
-    const optionNode = document.createElement("option");
-    optionNode.textContent = subject.subjectName;
-    optionNode.value = subject.subjectId;
-    return optionNode;
-}
-
-function disallowPastDates() {
+﻿function disallowPastDates() {
     const currDate = new Date().toISOString().split('T')[0];
     document.getElementById("startDate").setAttribute('min', currDate);
     document.getElementById("endDate").setAttribute('min', currDate);
@@ -73,8 +47,8 @@ function getParsedStartDate(todayUnixTime) {
 
 function getParsedEndDate(todayUnixTime, startDate) {
     const defaultEndDate = new Date(todayUnixTime);
-    const DEFAULT_MAX_INTERVAL_MONTHS = 1;
-    defaultEndDate.setMonth(defaultEndDate.getMonth() + DEFAULT_MAX_INTERVAL_MONTHS) // JS automatically does the % length
+    const DEFAULT_MAX_INTERVAL_DAYS = 3;
+    defaultEndDate.setDate(defaultEndDate.getDate() + DEFAULT_MAX_INTERVAL_DAYS) // JS automatically does the % length
 
     const enteredEndDate = document.getElementById('endDate').value;
     let endDate = enteredEndDate === "" ? new Date(defaultEndDate.getTime()) : new Date(enteredEndDate);
@@ -94,17 +68,14 @@ function generateRoomRequestBody() {
     const startDate = formatDate(startDateObj);
     const endDate = formatDate(getParsedEndDate(todayUnixTime, startDateObj));
 
-    const type = document.getElementById('lecture-type').value; //lecture, practical, theoretical, all, guest-lecture
-
     let data = { 
         "startDate": startDate,
         "endDate": endDate,
-        "lessonType": type,
     };
 
-    const lessonId = document.getElementById('lesson-name').value;
-    if (lessonId !== "") { // If a concrete subject has been selected, add it to the query (if not we will return all subjects)
-        data.lessonId = Number(lessonId);
+    const roomNumber = document.getElementById('room-number').value;
+    if (roomNumber !== "") { // If a concrete room has been selected, add it to the query
+        data.roomNumber = Number(roomNumber);
     }
 
     const token = localStorage.getItem('authToken');
@@ -115,9 +86,9 @@ function generateRoomRequestBody() {
     return data;
 }
 
-async function sendLessonsQuery() {
+async function sendMeetingsQuery() {
     const data = generateRoomRequestBody();
-    const response = await fetch('/api/get_lessons/', {
+    const response = await fetch('/api/get_meetings/', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -128,34 +99,33 @@ async function sendLessonsQuery() {
     return await response.json();
 }
 
-function getLessonTypeBasedOnReturnedJSON(lessonTypeFromJSON) {
-    const lessonParser = {
-        "Lecture": "Лекция",
-        "Practicum": "Практикум",
-        "Seminar": "Семинар",
-        "GuestLecture": "Гост-лекция"
-    };
+// event (nelesson), sys startTime, endTIme (ako ne sa podadeni, start e dnes) endDate sled 3 dni, hostID - ako ne vseki (vajno - da ne izlizat eventi, za koito sum zapisan ili sum host), roomId - ako ne za vsqka
+//start_time, end_time, date, host_ID/or not, room_id/not
 
-    return lessonParser[lessonTypeFromJSON];
+function parseReturnedTimeFromServer(time) {
+    return time.split(':').slice(0,2).join(':');
 }
 
-function generateLessonDescription(lesson, lessonSeqNumber) {
-    const type = getLessonTypeBasedOnReturnedJSON(lesson.lectureType)
-    const lessonDescription = document.createElement("article");
-    lessonDescription.innerHTML = `
+function generateMeetingDescription(meeting, meetingSeqNumber) {
+    const startTime = parseReturnedTimeFromServer(meeting.startTime)
+    const endTime = parseReturnedTimeFromServer(meeting.endTime)
+
+    const description = document.createElement("article");
+    description.innerHTML = `
     <header>
-        <h3>№${lessonSeqNumber}. ${lesson.lessonName}</h3>
-        <h4>Стая/Зала: ${lesson.roomNumber}</h4>
+        <h3>№${meetingSeqNumber}.    ${meeting.topic}</h3>
+        <h4>Стая/Зала: ${meeting.roomNumber}</h4>
+        <h4>Домакин: ${meeting.hostUsername}</h4>
     </header>
-    <p>Ден - ${lesson.date}</p>
-    <p>Начален час - ${lesson.startTime}</p>
-    <p>Краен час - ${lesson.endTime}</p>
-    <p>Вид занятие - ${type}</p>
+    <p>Ден - ${meeting.date}</p>
+    <p>Начален час - ${startTime}</p>
+    <p>Краен час - ${endTime}</p>
+    <p>Заети ${meeting.attendeesCount} места от общо ${meeting.roomCapacity}</p>
     `;
-    return lessonDescription;
+    return description;
 }
 
-function generateLessonAttendButton(lesson, token) {
+function generateMeetingAttendButton(meeting, token) {
     // create a button, only if we have valid token
     if (token === null) 
         return null;
@@ -195,45 +165,44 @@ function generateLessonAttendButton(lesson, token) {
     return reserveButton;
 }
 
-function generateLessonElement(lesson, lessonSeqNumber, token) {
-    const lessonElement = document.createElement('section');
-    lessonElement.setAttribute("data-id", lesson.id);
-    lessonElement.classList.add("lesson-container");
+function generateLessonElement(meeting, meetingSeqNumber, token) {
+    const meetingElement = document.createElement('section');
+    meetingElement.setAttribute("data-id", meeting.id);
+    meetingElement.classList.add("lesson-container");
 
-    const lessonDescription = generateLessonDescription(lesson, lessonSeqNumber);
-    lessonElement.appendChild(lessonDescription);
+    const description = generateMeetingDescription(meeting, meetingSeqNumber);
+    meetingElement.appendChild(description);
     
-    const attendButton = generateLessonAttendButton(lesson, token);
+    const attendButton = generateMeetingAttendButton(meeting, token);
     if (attendButton !== null) { // if we have token, a button would be created
-        lessonElement.appendChild(attendButton);
+        meetingElement.appendChild(attendButton);
     }
-    return lessonElement;
+    return meetingElement;
 }
 
 document.addEventListener('DOMContentLoaded', async function () {
-    await generateSubjectsList();
     generateBackMenuButton();
     disallowPastDates();
 
     document.getElementById('lessonSelectionForm').addEventListener('submit', async function (event) {
         event.preventDefault();
-        const responseData = await sendLessonsQuery();
-        const lessonsContainer = document.getElementById('LessonDetailsForm');
-        lessonsContainer.innerHTML = ''; // reset the container after previous query
-        lessonsContainer.setAttribute("hidden", true);
+        const meetingsContainer = document.getElementById('LessonDetailsForm');
+        meetingsContainer.innerHTML = ''; // reset the container after previous query
+        meetingsContainer.setAttribute("hidden", true);
         
-        if (responseData.lessons.length === 0) {
-            alert("Няма уроци спрямо зададените критерии!");
+        const responseData = await sendMeetingsQuery();
+        if (responseData.events.length === 0) {
+            alert("Няма събития в посочения интервал!");
             return;
         }
-        lessonsContainer.removeAttribute("hidden");
+        meetingsContainer.removeAttribute("hidden");
 
-        let lessonSeqNumber = 1;
+        let meetingSeqNumber = 1;
         const token = localStorage.getItem('authToken');
-        responseData.lessons.forEach(lesson => {
-            const lessonElement = generateLessonElement(lesson, lessonSeqNumber, token);
-            lessonsContainer.appendChild(lessonElement);
-            lessonSeqNumber++;
+        responseData.events.forEach(meeting => {
+            const meetingElement = generateLessonElement(meeting, meetingSeqNumber, token);
+            meetingsContainer.appendChild(meetingElement);
+            meetingSeqNumber++;
         });
     });
 });
