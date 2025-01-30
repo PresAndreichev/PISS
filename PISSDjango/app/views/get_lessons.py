@@ -50,7 +50,7 @@ def get_lessons(request):
                 {
                     "id": lesson.id,
                     "lessonName": lesson.subject.name,
-                    "roomNumber": lesson.room.id,
+                    "roomNumber": lesson.room.number,
                     "date": lesson.date.strftime("%Y-%m-%d"),
                     "startTime": lesson.start_time.strftime("%H:%M"),
                     "endTime": lesson.end_time.strftime("%H:%M"),

@@ -118,15 +118,20 @@ a {
 
 .lesson-container {
     display: flex;
-    align-items: left;
-    justify-content: center;
+    align-items: center;
+    justify-content: space-around;
     flex-direction: row;
+    flex: 0 0 50%;
+}
+
+.lesson-container > article {
+    width: 50%;
 }
 
 .lesson-container header {
     padding-top: 0.2em;
     margin-top: 0.2em;
-    text-align: center;
+    text-align: right;
 }
 
 .lesson-container button {

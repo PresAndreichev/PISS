@@ -155,17 +155,22 @@ function generateLessonDescription(lesson, lessonSeqNumber) {
     return lessonDescription;
 }
 
-function generateLessonAttendButton(lesson) {
+function generateLessonAttendButton(lesson, token) {
+    // create a button, only if we have valid token
+    if (token === null) 
+        return null;
+
     const reserveButton = document.createElement('button');
     reserveButton.textContent = 'Присъствай!';
     reserveButton.style.flexGrow = 1
 
+    // Listen for the event and show the button only if the user is registered, otherwise don't show it
     reserveButton.addEventListener('click', async function (event) {
         const roomEventId = event.target.parentElement.getAttribute("data-id");
         // we MUST extract the values FROM INSIDE this lambda function, otherwise context is lost when invoking event!
-        const token = localStorage.getItem('authToken');
+        const realToken = localStorage.getItem('authToken');
 
-        const data = JSON.stringify({roomEventId: roomEventId, token: token});
+        const data = JSON.stringify({roomEventId: roomEventId, token: realToken});
 
         const response = await fetch('/api/take_attendance/', {
             method: 'POST',
@@ -178,19 +183,19 @@ function generateLessonAttendButton(lesson) {
         
         if (response.status === 200) {
             alert('Успешно се записахте за събитието');
-            window.location.href = '/static/html/index.html';
         } else {
             // He has already registered or the capacity of the room has been fulfilled!
             alert('Не успяхте да се запишете за урока - вече сте записан или местата са свършили ;(');
-            // REFACTOR THE HTMLs here! - sent another request to fetch data
-            window.location.href = '/static/html/lesson_search.html';
         }
-    });
+
+        // Nevermind how the operation went, we should get the latest result (either we have reached a capacity or need to know which rooms are still available
+        document.getElementById('LessonSearchForm').submit();
+    })
 
     return reserveButton;
 }
 
-function generateLessonElement(lesson, lessonSeqNumber) {
+function generateLessonElement(lesson, lessonSeqNumber, token) {
     const lessonElement = document.createElement('section');
     lessonElement.setAttribute("data-id", lesson.id);
     lessonElement.classList.add("lesson-container");
@@ -198,8 +203,10 @@ function generateLessonElement(lesson, lessonSeqNumber) {
     const lessonDescription = generateLessonDescription(lesson, lessonSeqNumber);
     lessonElement.appendChild(lessonDescription);
     
-    const attendButton = generateLessonAttendButton(lesson);
-    lessonElement.appendChild(attendButton);
+    const attendButton = generateLessonAttendButton(lesson, token);
+    if (attendButton !== null) { // if we have token, a button would be created
+        lessonElement.appendChild(attendButton);
+    }
     return lessonElement;
 }
 
@@ -211,7 +218,6 @@ document.addEventListener('DOMContentLoaded', async function () {
     document.getElementById('LessonSearchForm').addEventListener('submit', async function (event) {
         event.preventDefault();
         const responseData = await sendLessonsQuery();
-        console.log(responseData.lessons.length);
         const lessonsContainer = document.getElementById('LessonDetailsForm');
         lessonsContainer.innerHTML = ''; // reset the container after previous query
         lessonsContainer.setAttribute("hidden", true);
@@ -221,9 +227,11 @@ document.addEventListener('DOMContentLoaded', async function () {
             return;
         }
         lessonsContainer.removeAttribute("hidden");
+
         let lessonSeqNumber = 1;
+        const token = localStorage.getItem('authToken');
         responseData.lessons.forEach(lesson => {
-            const lessonElement = generateLessonElement(lesson, lessonSeqNumber);
+            const lessonElement = generateLessonElement(lesson, lessonSeqNumber, token);
             lessonsContainer.appendChild(lessonElement);
             lessonSeqNumber++;
         });
