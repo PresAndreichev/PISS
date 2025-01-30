@@ -1,5 +1,3 @@
-#po azbuchen red predmeti 
-# vrushtam ime, lessond_id
 from django.http import HttpResponse
 from django.shortcuts import render 
 from app.models import Subject

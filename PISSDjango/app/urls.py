@@ -20,6 +20,7 @@ urlpatterns = [
     path('api/reserve_room/', reserve_room, name='reserve_room'),
     path('api/get_lessons/', get_lessons, name='get_lesson'),
     path('api/take_attendance/', take_attendance, name='take_attendance'),
-    path('api/list_subjects/', list_subjects, name='list_subjects')
+    path('api/list_subjects/', list_subjects, name='list_subjects'),
+    path('api/index_visualization/', index_visualization, name='index_visualization')
 ]
 # Add the URLS, of the get_lesson, take_attendance, get_rooms, reserve_room, get_saved_rooms
