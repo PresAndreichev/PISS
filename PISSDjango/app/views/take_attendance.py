@@ -17,14 +17,15 @@ def take_attendance(request):
             return JsonResponse({"success": False, "message": "Invalid JSON format."}, status=400)
     
         token = data.get('token')
-        if token:
-            try:
-                decoded_token = decode_token(token)
-                user_id = decoded_token.get('user_id')
-            except Exception:
-                print("Invalid token provided.")
-
-
+        if not token:
+            return JsonResponse({"success": False, "message": "Token not provided."}, status=400)
+        try:
+            decoded_token = decode_token(token)
+            user_id = decoded_token.get('user_id')
+        except Exception:
+            return JsonResponse({"success": False, "message": "Invalid token provided."}, status=400)
+        
+                
         room_event_id = data.get('roomEventId')
         try:
             lesson = LessonEvent.objects.get(id=room_event_id)

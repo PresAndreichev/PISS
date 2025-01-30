@@ -5,7 +5,6 @@ from django.http import JsonResponse
 
 def list_subjects(request):
     subjects = Subject.objects.all().order_by('name','id')
-
     subject_data = [{'subjects': subject.name, 'subject_id': subject.id  }
         for subject in subjects ]
 
