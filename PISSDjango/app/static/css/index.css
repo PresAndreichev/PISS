@@ -5,7 +5,7 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 90vh;
+    /*height: 90vh;*/
     color: #333;
 }
 
@@ -18,15 +18,19 @@ main {
     padding: 20px;
     border-radius: 8px;
     width: 90%;
-    max-width: 1000px;
+    max-width: 70%;
     display: flex;
     justify-content: space-around;
+    align-items: center;
 }
 
 form {
     display: flex;
     flex-direction: column;
-    height: 200%;
+    align-items: center;
+    justify-content: center;
+    height: 50%;
+    max-height: 30%;
 }
 
 h1 {
@@ -43,20 +47,18 @@ h1 {
     height: auto;
     border-radius: 15px;
     padding: 10px;
-    margin-bottom: 20vh;
+    align-items: center;
+}
+
+.button-container > * {
+    flex: 0 0 30;
+    height: 2em;
 }
 
 p a {
     width: 80%;
     height: 80%;
 }
-
-#confirm_deletion_button,
-#stop_deletion_button {
-    display: inline-block; 
-    height: 50%;
-}
-
 
 a {
     text-decoration: none;
@@ -78,3 +80,28 @@ a {
     p a:hover, a:hover {
         background-color: #2980b9;
     }
+
+#upcoming-events {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.event {
+    flex: 0 0 30;
+    min-width: 30%;
+    border: 0.3em solid black;
+    padding: 1em;
+    margin: 1em 0;
+    background-color: #2980b9;
+    color: #fff;
+}
+
+.event header {
+    margin-top: 0;
+}
+
+.event.host {
+    background-color: indianred;;
+}
