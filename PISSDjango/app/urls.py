@@ -25,6 +25,7 @@ urlpatterns = [
     path('api/take_attendance/', take_attendance, name='take_attendance'),
     path('api/list_subjects/', list_subjects, name='list_subjects'),
     path('api/index_visualization/', index_visualization, name='index_visualization'),
+    path('api/get_meetings/', get_meetings, name='get_meetings'),
     path('api/qr_scanner/', qr_scanner, name ='qr_scanner')
 ]
 # Add the URLS, of the get_lesson, take_attendance, get_rooms, reserve_room, get_saved_rooms
